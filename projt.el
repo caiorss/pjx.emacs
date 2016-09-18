@@ -143,6 +143,11 @@
 ;;  @SECTION: User commands 
 ;;
 
+(defun pjx/commands ()
+  "Show all pjx/ commands to the user"
+  (interactive)
+  (command-apropos "pjx/"))
+
 (defun pjx/helm ()
   "Select project directory and open it in Helm."
   (interactive)
