@@ -100,7 +100,6 @@
                 ))))
 
 
-
 ;;;;============== User Commands ================ ;;
 ;;  @SECTION: User commands 
 ;;
@@ -110,7 +109,7 @@
   (interactive)
   (pjx/project-helm-fn (lambda (p)                         
                          (setq pjx/current-project p)
-                         (dired p)
+                         ;;(dired p)
 
                          (if pjx/current-project
                              (progn  (pjx/close)
@@ -136,6 +135,14 @@
   (pjx/project-files-helm-fn #'find-file))
 
 
+(defun pjx/panel ()
+  "Opens a vertical panel containing the project files."
+  (interactive)
+  (split-window-horizontally)  
+  (with-current-buffer  (dired-other-window pjx/current-project)      
+    (dired-omit-mode)
+    (dired-hide-details-mode)
+    ))
 
 (defun pjx/close ()
   "Close all files belonging to the current project."
