@@ -143,6 +143,11 @@
 ;;  @SECTION: User commands 
 ;;
 
+(defun pjx/root-dired ()
+  "Open root directory"
+  (interactive)
+  (dired pjx/project-root))
+
 (defun pjx/commands ()
   "Show all pjx/ commands to the user"
   (interactive)
@@ -225,6 +230,25 @@
   (message "Project files closed")
   
   ) ;; End of pxj/close
+
+
+(defun pjx/dired-move ()
+  "Move selected directory in dired-mode to project-root directory."
+  (interactive)
+  (let* (
+        ;; Current directory at point 
+        (dir            (dired-file-name-at-point))
+        ;; Name without path 
+        (base-name      (file-name-nondirectory dir))
+        ;;
+        (new-name       (concat (file-name-as-directory pjx/project-root)
+                             base-name
+                             ))
+        )
+
+    (rename-file dir new-name)
+    (dired new-name)
+    ))
 
 
 (defun pjx/term ()
