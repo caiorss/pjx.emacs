@@ -3,7 +3,7 @@
 (require 'helm)
 
 (defgroup pjx nil
-  "Project Tool for Eamcs"
+  "Project Tool for Emacs"
   :group 'tools
   )
 
@@ -38,6 +38,12 @@
   ")
 
 (defvar pjx/current-project nil "Holds the current project name")
+
+
+(defun pjx/with-directory (directory fn)
+  "Runs a function fn inside a directory setting default-directory."
+  (let ((default-directory))
+    (funcall fn)))
 
 
 (defun pjx/file-in-directory-p (directory filename)
@@ -145,6 +151,14 @@
   "Select a file of current project and open it."
   (interactive)
   (pjx/project-files-helm-fn #'find-file))
+
+(defun pjx/file-git-open-all ()
+  "Open all files listed in git current branch."
+  (interactive)
+  (let ((default-directory  (file-name-as-directory pjx/current-project)))
+    (mapc #'find-file-noselect (pjx/project-get-git-files))
+    (dired pjx/current-project)
+    ))
 
 
 (defun pjx/panel ()
