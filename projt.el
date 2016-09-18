@@ -98,13 +98,15 @@
 
 (defun pjx/project-get-buffers ()
   "Get all buffers related to current project."
-  (remove-if-not (lambda (b)
-                   (and (buffer-file-name b)
-                        (pjx/file-in-directory-p  pjx/current-project
-                                                  (buffer-file-name b))))
+  (mapcar (lambda (b) (cons (buffer-name b) b))
+          
+          (remove-if-not (lambda (b)
+                           (and (buffer-file-name b)
+                                (pjx/file-in-directory-p  pjx/current-project
+                                                          (buffer-file-name b))))
 
-                 (buffer-list)
-                 ))
+                         (buffer-list)
+                   )))
 
 (defun pjx/project-helm-fn (callback)
   ""
@@ -123,6 +125,16 @@
    :sources  `((
                 (name       . "Dir: ")
                 (candidates . ,(pjx/project-get-files))
+                (action     . callback)
+                ))))
+
+
+(defun pjx/project-buffers-helm-fn (callback)
+  (helm
+   :prompt "Project File: " 
+   :sources  `((
+                (name       . "Dir: ")
+                (candidates . ,(pjx/project-get-buffers))
                 (action     . callback)
                 ))))
 
