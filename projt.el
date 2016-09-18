@@ -201,12 +201,12 @@
 
   (interactive)
   
-  (let ((default-directory  (file-name-as-directory  pjx/current-project)))
-
-    (start-process "term"  ;; Process name 
-                   nil     ;; buffer name
-                   pjx/terminal
-                   )))
+  (pjx/with-directory pjx/current-project
+                      (lambda ()
+                        (start-process "term.proj" ;; Process name 
+                                       nil ;; buffer name
+                                       pjx/terminal
+                                       ))))
 
 (defun pjx/project-new ()
   "Creates a new project."
