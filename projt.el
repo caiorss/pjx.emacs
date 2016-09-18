@@ -42,7 +42,7 @@
 
 (defun pjx/with-directory (directory fn)
   "Runs a function fn inside a directory setting default-directory."
-  (let ((default-directory))
+  (let ((default-directory directory))
     (funcall fn)))
 
 
@@ -207,4 +207,17 @@
                    nil     ;; buffer name
                    pjx/terminal
                    )))
+
+(defun pjx/project-new ()
+  "Creates a new project."
+  (interactive)
+  (pjx/with-directory pjx/project-root
+
+                      (lambda ()
+                        (let
+                            ((project-name  (read-string "Project Name: ")))
+
+                          (make-directory project-name)
+                          (dired project-name)))))
+
 
