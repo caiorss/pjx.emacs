@@ -181,6 +181,11 @@
     (dired pjx/current-project)
     ))
 
+(defun pjx/file-switch ()
+  "Switch between project files."
+  (interactive)
+  (pjx/project-buffers-helm-fn #'switch-to-buffer))
+
 
 (defun pjx/panel ()
   "Opens a vertical panel containing the project files."
