@@ -96,6 +96,15 @@
     (split-string (replace-regexp-in-string "\n+$" "" outp) "\n")))
 
 
+(defun pjx/project-get-buffers ()
+  "Get all buffers related to current project."
+  (remove-if-not (lambda (b)
+                   (and (buffer-file-name b)
+                        (pjx/file-in-directory-p  pjx/current-project
+                                                  (buffer-file-name b))))
+
+                 (buffer-list)
+                 ))
 
 (defun pjx/project-helm-fn (callback)
   ""
