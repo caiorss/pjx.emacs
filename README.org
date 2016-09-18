@@ -1,0 +1,12 @@
+* Emacs-projtools 
+
+IDEA: Create an Emacs package to handle software projects. 
+
+Wishlist / Requirements:
+
+ - File template selection per lanaguage
+ - Project template selection 
+ - Project metadata search
+ - Integrate to build system
+ - Provide higher order functions
+ - Close and Open a set of files
