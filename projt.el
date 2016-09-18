@@ -79,6 +79,18 @@
           (pjx/directory-files pjx/current-project))
   )
 
+
+(defun pjx/project-get-git-files ()
+  "Returns a list of files tracked by git in project master branch."
+  (let* (
+         (default-directory (file-name-as-directory pjx/current-project))
+         (outp   (shell-command-to-string "git ls-tree -r master --name-only"))
+         )
+
+    (split-string (replace-regexp-in-string "\n+$" "" outp) "\n")))
+
+
+
 (defun pjx/project-helm-fn (callback)
   ""
   (helm
