@@ -1,3 +1,20 @@
+;;; pjx.el --- Project Manager for Emacs             -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2016  Caio Rodrigues Soares Silva
+
+;; Author: Caio Rodrigues Soares Silva <caiorss.rodrigues@gmail.com>
+;; Keywords: project, manager, browser
+
+;;; Commentary:
+
+;; Small Project manager for Emacs.
+
+;;; Code:
+
+
+
+(provide 'pjx)
+;;; pjx.el ends here
 
 (require 'cl)
 (require 'helm)
@@ -261,8 +278,7 @@
         )
 
     (rename-file dir new-name)
-    (dired new-name)
-    ))
+    (dired new-name)))
 
 
 (defun pjx/term ()
@@ -291,3 +307,4 @@
 
 
 (provide 'pjx)
+;;; pjx.el ends here
