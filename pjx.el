@@ -1,4 +1,4 @@
-;;; pjx.el --- Project Manager for Emacs             -*- lexical-binding: t; -*-
+;;; pjx.el --- Project Manager for Emacs             -*- lexical-binding: nil; -*-
 
 ;; Copyright (C) 2016  Caio Rodrigues Soares Silva
 
