@@ -176,14 +176,10 @@
   (pjx--project-helm-fn (lambda (p)                         
                          (setq pjx/current-project p)
                          ;;(dired p)
-
-                         (if pjx/current-project
-                             (progn  (pjx/close)
-                                     (setq pjx))
-
-                           (setq pjx/current-project p)
-                           (dired p)
-                           ))))
+                         (when pjx/current-project                                             (pjx/close))
+                         (setq pjx/current-project p)
+                         (dired p)
+                         )))
 
 
 (defun pjx/helm-select ()
@@ -203,10 +199,7 @@
 
 (defun pjx/dir ()
   "Open current project set with pjx/helm.
-   
-  It opens the directory stored in variable:  
-  `pjx/current-project`
-  "
+It opens the directory stored in variable: `pjx/current-project`"
   (interactive)
   (dired pjx/current-project))
 
