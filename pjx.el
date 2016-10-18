@@ -231,29 +231,26 @@ It opens the directory stored in variable: `pjx/current-project`"
     (dired-hide-details-mode)
     ))
 
-(defun pjx/close ()
+(defun pjx/close-files ()
   "Close all files belonging to the current project."
   (interactive)
   
   (mapc (lambda (b)
-          (let
-              (
-               (file-path (buffer-file-name b))
-               )
+          (let  ((file-path (buffer-file-name b)))
             
-            (if (and file-path (pjx--file-in-directory-p pjx/current-project file-path))
-
+            (if (and file-path   ;; non-nil -> Buffer has a file associated.
+                     (pjx--file-in-directory-p pjx/current-project file-path))
                 (with-current-buffer b
                   (save-buffer)
                   (kill-buffer b)
-
                   ))))
-
-
         (buffer-list))
 
   (message "Project files closed"))
    ;; End of pxj/close
+
+
+
 
 
 (defun pjx/dired-move ()
@@ -267,8 +264,7 @@ It opens the directory stored in variable: `pjx/current-project`"
         ;;
         (new-name       (concat (file-name-as-directory pjx/project-root)
                              base-name
-                             ))
-        )
+                             )))
 
     (rename-file dir new-name)
     (dired new-name)))
