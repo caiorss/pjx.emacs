@@ -58,14 +58,14 @@
 
 
 (defun pjx--with-directory (directory fn)
-  "Runs a function fn inside a directory setting default-directory."
+  "Run a function fn inside a directory setting default-directory."
   (let ((default-directory (file-name-as-directory directory)))
     (funcall fn)))
 
 
 (defun pjx--file-in-directory-p (directory filename)
-  (equal (file-name-as-directory (expand-file-name (file-name-directory filename)))
-         (file-name-as-directory (expand-file-name directory))))
+  (string-prefix-p (expand-file-name (file-name-directory filename))
+                   (expand-file-name directory)))
 
 
 (defun pjx--directory-files (directory)
@@ -194,19 +194,29 @@
                                      (setq pjx))
 
                            (setq pjx/current-project p)
-                           )
-                         )))
+                           ))))
+
 
 (defun pjx/dir ()
   "Open current project set with pjx/helm.
 It opens the directory stored in variable: `pjx/current-project`"
-  (interactive)
-  (dired pjx/current-project))
+  (interactive) 
+  (dired pjx/current-project)
+  (dired-omit-mode)
+  (dired-hide-details-mode))
 
 (defun pjx/file-open  ()
   "Select a file of current project and open it."
   (interactive)
   (pjx--project-files-helm-fn #'find-file))
+
+(defun pjx/file-new ()
+  "Create a new file at project directory."
+  (interactive)
+  (pjx--with-directory  pjx/current-project
+                        (lambda ()
+                          (call-interactively #'find-file (read-string "File: "))
+                          )))
 
 (defun pjx/file-git-open-all ()
   "Open all files listed in git current branch."
