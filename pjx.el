@@ -260,6 +260,13 @@ It opens the directory stored in variable: `pjx/current-project`"
    ;; End of pxj/close
 
 
+(defun pjx/compile ()
+  "Run compilation command at project directory."
+  (interactive)
+  (pjx--with-directory  pjx/current-project
+                        (lambda ()
+                          (call-interactively #'compile)
+                          )))
 
 
 
