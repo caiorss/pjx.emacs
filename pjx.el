@@ -176,7 +176,8 @@
   (pjx--project-helm-fn (lambda (p)                         
                          (setq pjx/current-project p)
                          ;;(dired p)
-                         (when pjx/current-project                                             (pjx/close))
+                         (when pjx/current-project
+                           (pjx/close-files))
                          (setq pjx/current-project p)
                          (dired p)
                          )))
