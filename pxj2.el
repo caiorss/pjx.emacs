@@ -124,3 +124,22 @@
   (pjx--project-select-callback #'dired-other-frame))
 
 
+(defun pjx/project-close ()
+  "Kill all buffers associated with a selected project."
+  (interactive)
+  (pjx--project-select-callback
+   (lambda (proj-path)
+
+     (mapc (lambda (buf)
+             (if (pjx--buffer-in-project-p
+                  (file-name-nondirectory proj-path) buf)
+                 (with-current-buffer buf
+                   ;; (save-buffer)
+                   (kill-this-buffer)
+                   )))
+           (buffer-list))
+
+     (let ((buf (get-file-buffer proj-path)))
+       (when buf
+         (with-current-buffer buf
+           (kill-this-buffer)))))))
