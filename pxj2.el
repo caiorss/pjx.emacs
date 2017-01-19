@@ -4,6 +4,9 @@
 ;;;
 (setq pjx-root-directory "~/Documents/projects")
 
+
+;;; ============== Internal functions and helpers ========== ;;
+
 (defun pxj--path-in-dir-p (root path)
   "Check if path is in root directory."
   (string-prefix-p (expand-file-name root) (expand-file-name path)))
@@ -26,27 +29,6 @@
                 (action     . callback)
                 ))))
 
-
-
-(defun pjx/dired ()
-  "Open root project directory."
-  (interactive)
-  (dired pjx-root-directory))
-
-(defun pjx/dired-frame ()
-  "Open root project directory in a new frame."
-  (interactive)
-  (dired-other-frame pjx-root-directory))
-
-(defun pjx/project-open ()
-  "Select project directory and open it in dired-mode."
-  (interactive)
-  (pjx--select-callback #'dired))
-
-(defun pjx/project-open-frame ()
-  "Open project in a new frame."
-  (interactive)
-  (pjx--select-callback #'dired-other-frame))
 
 
 
@@ -86,6 +68,30 @@
                 (candidates . ,(pjx--get-opened-projects))
                 (action     .  callback)
                 ))))
+
+
+;;; ============  User Commands ====================== ;;;
+
+
+(defun pjx/dired ()
+  "Open root project directory."
+  (interactive)
+  (dired pjx-root-directory))
+
+(defun pjx/dired-frame ()
+  "Open root project directory in a new frame."
+  (interactive)
+  (dired-other-frame pjx-root-directory))
+
+(defun pjx/project-open ()
+  "Select project directory and open it in dired-mode."
+  (interactive)
+  (pjx--select-callback #'dired))
+
+(defun pjx/project-open-frame ()
+  "Open project in a new frame."
+  (interactive)
+  (pjx--select-callback #'dired-other-frame))
 
 (defun pjx/project-switch-dir ()
   "Switch to project directory"
