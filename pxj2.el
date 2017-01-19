@@ -9,7 +9,7 @@
 
 ;;; ============== Internal functions and helpers ========== ;;
 
-(defun pxj--path-in-dir-p (root path)
+(defun pjx--path-in-dir-p (root path)
   "Check if path is in root directory."
   (string-prefix-p (expand-file-name root) (expand-file-name path)))
 
