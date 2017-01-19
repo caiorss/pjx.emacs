@@ -21,14 +21,15 @@
 ;; Select a project and call the functions callback
 ;; as (callback <project-path>) like (callback "~/Documents/projects/test-cpp")
 ;;
-(defun pjx--select-callback (callback)
+(defun pjx--project-open-callback (callback)
   ""
   (helm
    :prompt "Project: "
    :sources  `((
                 (name       . "Pjx: ")
                 (candidates . ,(pjx--project-list))
-                (action     . callback)
+                (action     . (lambda (proj) (setq pjx-current-project proj)
+                                             (funcall callback proj)))
                 ))))
 
 
@@ -88,12 +89,12 @@
 (defun pjx/project-open ()
   "Select project directory and open it in dired-mode."
   (interactive)
-  (pjx--select-callback #'dired))
+  (pjx--project-open-callback #'dired))
 
 (defun pjx/project-open-frame ()
   "Open project in a new frame."
   (interactive)
-  (pjx--select-callback #'dired-other-frame))
+  (pjx--project-open-callback #'dired-other-frame))
 
 (defun pjx/project-switch-dir ()
   "Switch to project directory"
