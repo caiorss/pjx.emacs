@@ -47,13 +47,10 @@
                                              (funcall callback proj)))
                 ))))
 
-
-
-
 (defun pjx--get-buffers ()
   "Return all buffers which file name or default directory is in `pjx-root-directory`"
   (cl-remove-if-not (lambda (buf)
-                      (pxj--path-in-dir-p pjx-root-directory
+                      (pjx--path-in-dir-p pjx-root-directory
                                         (with-current-buffer buf
                                           (or (buffer-file-name)
                                               default-directory))))
