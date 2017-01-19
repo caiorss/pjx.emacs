@@ -4,6 +4,8 @@
 ;;;
 (setq pjx-root-directory "~/Documents/projects")
 
+(setq pjx-current-project nil)
+
 
 ;;; ============== Internal functions and helpers ========== ;;
 
