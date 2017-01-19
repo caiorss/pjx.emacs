@@ -23,6 +23,16 @@
   "Returns a path from a given project."
   (concat (file-name-as-directory pjx-root-directory) project-name))
 
+(defun pjx--buffer-in-project-p (project-name buf)
+  "Test if a buffer belongs to a project."
+  (pjx--path-in-dir-p
+   (pjx--project-path project-name)
+   (with-current-buffer buf
+                        (or (buffer-file-name)
+                            default-directory))))
+
+
+
 ;; Select a project and call the functions callback
 ;; as (callback <project-path>) like (callback "~/Documents/projects/test-cpp")
 ;;
