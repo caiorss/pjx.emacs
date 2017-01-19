@@ -18,6 +18,11 @@
   (mapcar (lambda (p) (cons (file-name-nondirectory p) p))
           (pjx--directory-files pjx/project-root)))
 
+
+(defun pjx--project-path (project-name)
+  "Returns a path from a given project."
+  (concat (file-name-as-directory pjx-root-directory) project-name))
+
 ;; Select a project and call the functions callback
 ;; as (callback <project-path>) like (callback "~/Documents/projects/test-cpp")
 ;;
