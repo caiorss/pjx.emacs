@@ -15,10 +15,11 @@
 (setq pjx-ignore-suffix-list
       '( ".so" ".o" ".dll" ".exe" ".bin"
          ".jar" ".class" ".war" ".tar" ".tgz" ".pdf" ".zip" ".pyc" ".elc"
+         ".gif" ".png" ".jpg" ".jpeg" "~"
         ))
 
 (setq pjx-ignore-prefix-list
-      '("target" "project" "images" "dist" "bin" "build"))
+      '("target" "project" "images" "dist" "bin" "build" "packages" "obj" "tmp"))
 
 
 ;;; ============== Internal functions and helpers ========== ;;
