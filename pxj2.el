@@ -89,6 +89,12 @@
                 ))))
 
 
+(defun pjx--get-buffer-project ()
+  "Get the project the current buffer is associated with."
+  (car (remove-if-not (lambda (proj) (pjx--buffer-in-project-p (car proj) (current-buffer)))
+                      (pjx--get-opened-projects))))
+
+
 ;;; ============  User Commands ====================== ;;;
 
 
