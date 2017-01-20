@@ -105,8 +105,9 @@
                  (buffer-list)))
 
 
-;;; ============  User Commands ====================== ;;;
+;;; ====================  User Commands ======================== ;;;
 
+;;; =====> Commands to Open Project
 
 (defun pjx/dired ()
   "Open root project directory."
@@ -128,43 +129,7 @@
   (interactive)
   (pjx--project-open-callback #'dired-other-frame))
 
-(defun pjx/project-switch-dir ()
-  "Switch to project directory"
-  (interactive)
-  (pjx--project-select-callback #'dired))
-
-(defun pjx/project-switch-dir-window ()
-  "Switch to project directory in other window."
-  (interactive)
-  (pjx--project-select-callback #'dired-other-window))
-
-(defun pjx/project-switch-dir-frame ()
-  "Switch to project directory in other window."
-  (interactive)
-  (pjx--project-select-callback #'dired-other-frame))
-
-
-(defun pjx/project-compile ()
-  "Run compilation command at project directory."
-  (interactive)
-  (let ((default-directory (cdr (pjx--get-project-of-buffer))))
-    (compile (read-shell-command "$ > " compile-command))))
-
-(defun pjx/project-top ()
-  "Open project top level directory."
-  (dired (cdr (pjx--get-project-of-buffer))))
-
-
-(defun pjx/buffer-switch ()
-  (interactive)
-  (helm
-   :prompt "Project File: "
-   :sources  `((
-                (name       . "Dir: ")
-                (candidates . ,(pjx--get-project-buffers
-                                (pjx--get-project-of-buffer)))
-                (action     . switch-to-buffer)
-                ))))
+;;; ****** Commands to close a project ********************** ;;
 
 
 (defun pjx/project-close ()
@@ -185,3 +150,50 @@
        (when buf
          (with-current-buffer buf
            (kill-this-buffer)))))))
+
+;; **** Commands to switch between project directories ****** ;;
+
+
+(defun pjx/project-switch-dir ()
+  "Switch to project directory"
+  (interactive)
+  (pjx--project-select-callback #'dired))
+
+(defun pjx/project-switch-dir-window ()
+  "Switch to project directory in other window."
+  (interactive)
+  (pjx--project-select-callback #'dired-other-window))
+
+(defun pjx/project-switch-dir-frame ()
+  "Switch to project directory in other window."
+  (interactive)
+  (pjx--project-select-callback #'dired-other-frame))
+
+;;; *** Commands for project navigation and file selection ***** ;; 
+
+
+(defun pjx/project-top ()
+  "Open project top level directory."
+  (dired (cdr (pjx--get-project-of-buffer))))
+
+
+(defun pjx/buffer-switch ()
+  (interactive)
+  (helm
+   :prompt "Project File: "
+   :sources  `((
+                (name       . "Dir: ")
+                (candidates . ,(pjx--get-project-buffers
+                                (pjx--get-project-of-buffer)))
+                (action     . switch-to-buffer)
+                ))))
+
+;;; **** Commands to Build Project / Compile *******
+
+(defun pjx/compile ()
+  "Run compilation command at project directory."
+  (interactive)
+  (let ((default-directory (cdr (pjx--get-project-of-buffer))))
+    (compile (read-shell-command "$ > " compile-command))))
+
+
