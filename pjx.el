@@ -175,8 +175,9 @@
 ;;; *** Commands for project navigation and file selection ***** ;; 
 
 
-(defun pjx/project-top ()
-  "Open project top level directory."
+;;; Go to current project root directory
+(defun pjx/this-top ()
+  "Go to current project root directory."
   (interactive)
   (dired (cdr (pjx--get-project-of-buffer))))
 
