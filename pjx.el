@@ -140,22 +140,25 @@
 
 
 
-(defun pjx--find-files-by-regex (proj-name regex)
+(defun pjx--find-files-by-regex (proj-name regex ignore-prefix-list ignore-suffix-list )
   (let ((path (pjx--project-path proj-name)))
-
-    (mapcar (lambda (file) (cons (file-relative-name file path)
-                                 file))
-     (directory-files-recursively path regex))))
-
-(defun pjx--find-project-files (proj ignore-prefix-list ignore-suffix-list)
-  (remove-if (lambda (cell)
+    (remove-if (lambda (cell)
                (let ((s (car cell)))
                 (or  (string-match-p "\\.git" s)
                     (some  (lambda (ext) (string-suffix-p ext s))
                            ignore-suffix-list)
                     (some  (lambda (pre) (string-prefix-p pre s))
                            ignore-prefix-list))))
-               (pjx--find-files-by-regex proj ".")))
+
+               (mapcar (lambda (file) (cons (file-relative-name file path)
+                                            file))
+                       (directory-files-recursively path regex)))))
+
+(defun pjx--find-project-files (proj ignore-prefix-list ignore-suffix-list)
+  (pjx--find-files-by-regex proj
+                            "."
+                            ignore-prefix-list
+                            ignore-suffix-list))
 
 
 ;;; ====================  User Commands ======================== ;;;
