@@ -181,8 +181,8 @@
   (interactive)
   (dired (cdr (pjx--get-project-of-buffer))))
 
-
-(defun pjx/buffer-switch ()
+(defun pjx/this-buffer-switch ()
+  "Switch between buffers or current project."
   (interactive)
   (helm
    :prompt "Project File: "
