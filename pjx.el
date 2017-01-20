@@ -265,6 +265,22 @@
                 ))))
 
 
+
+(defun pjx/find-file ()
+  "Find all project files recursively."
+  (interactive)
+  (helm
+   :prompt "Project Files"
+   :sources  `((
+                (name       . "File: ")
+                (candidates . ,(pjx--find-project-files (car (pjx--get-project-of-buffer))
+                                                        pjx-ignore-prefix-list
+                                                        pjx-ignore-suffix-list
+                                                        ))
+                (action     .  find-file)
+                ))))
+
+
 ;;; **** Commands to Build Project / Compile *******
 
 (defun pjx/this-compile ()
