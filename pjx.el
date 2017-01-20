@@ -162,6 +162,11 @@
      (pjx--project-close
       (file-name-nondirectory path)))))
 
+(defun pjx/this-close ()
+  "Kill all buffers associated with a current project."
+  (interactive)
+  (pjx--project-close (pjx--get-project-of-buffer)))
+
 ;; **** Commands to switch between project directories ****** ;;
 
 
