@@ -134,6 +134,12 @@
   (pjx--project-select-callback #'dired-other-frame))
 
 
+(defun pjx/project-compile ()
+  "Run compilation command at project directory."
+  (interactive)
+  (let ((default-directory (cdr (pjx--get-buffer-project))))
+    (compile (read-shell-command "$ > "))))
+
 (defun pjx/project-close ()
   "Kill all buffers associated with a selected project."
   (interactive)
