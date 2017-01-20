@@ -104,6 +104,20 @@
 		   (pjx--buffer-in-project-p project-name buf))
                  (buffer-list)))
 
+(defun pjx--project-close (proj-name)
+  "Close/kill all buffers belonging to a project."
+  (mapc (lambda (buf)
+             (with-current-buffer buf
+                   ;; (save-buffer)
+                   (kill-this-buffer)
+                   ))
+        (pjx--get-project-buffers proj-name))
+
+     ;; (let ((buf (get-file-buffer proj-path)))
+     ;;   (when buf
+     ;;     (with-current-buffer buf
+     ;;       (kill-this-buffer))))
+     )
 
 ;;; ====================  User Commands ======================== ;;;
 
@@ -136,20 +150,9 @@
   "Kill all buffers associated with a selected project."
   (interactive)
   (pjx--project-select-callback
-   (lambda (proj-path)
-
-     (mapc (lambda (buf)
-             (with-current-buffer buf
-                   ;; (save-buffer)
-                   (kill-this-buffer)
-                   ))
-           (pjx--get-project-buffers
-            (file-name-nondirectory proj-path)))
-
-     (let ((buf (get-file-buffer proj-path)))
-       (when buf
-         (with-current-buffer buf
-           (kill-this-buffer)))))))
+   (lambda (path)
+     (pjx--project-close
+      (file-name-nondirectory path)))))
 
 ;; **** Commands to switch between project directories ****** ;;
 
