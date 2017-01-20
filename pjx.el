@@ -284,7 +284,7 @@
 
 ;;; **** Commands to Build Project / Compile *******
 
-(defun pjx/this-compile ()
+(defun pjx/compile ()
   "Run compilation command at current project directory."
   (interactive)
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
