@@ -162,19 +162,19 @@
 
 ;;; =====> Commands to Open Project
 
-(defun pjx/dired ()
+(defun pjx/root-dired ()
   "Open root project directory."
   (interactive)
   (dired pjx-root-directory)
   (dired-omit-mode)
   (dired-hide-details-mode))
 
-(defun pjx/dired-frame ()
+(defun pjx/root-dired-frame ()
   "Open root project directory in a new frame."
   (interactive)
   (dired-other-frame pjx-root-directory))
 
-(defun pjx/project-open ()
+(defun pjx/open ()
   "Select project directory and open it in dired-mode."
   (interactive)
   (pjx--project-open-callback (lambda (path)
@@ -183,7 +183,7 @@
                                 (dired-hide-details-mode)
                                 )))
 
-(defun pjx/project-open-frame ()
+(defun pjx/open-frame ()
   "Open project in a new frame."
   (interactive)
   (pjx--project-open-callback (lambda (path)
@@ -203,10 +203,10 @@
      (pjx--project-close
       (file-name-nondirectory path)))))
 
-(defun pjx/this-close ()
+(defun pjx/close ()
   "Kill all buffers associated with a current project."
   (interactive)
-  (pjx--project-close (pjx--get-project-of-buffer)))
+  (pjx--project-close (car (pjx--get-project-of-buffer))))
 
 ;; **** Commands to switch between project directories ****** ;;
 
@@ -230,12 +230,12 @@
 
 
 ;;; Go to current project root directory
-(defun pjx/this-top ()
+(defun pjx/top ()
   "Go to current project root directory."
   (interactive)
   (dired (cdr (pjx--get-project-of-buffer))))
 
-(defun pjx/this-buffer-switch ()
+(defun pjx/switch ()
   "Switch between buffers belonging to current project."
   (interactive)
   (helm
@@ -251,7 +251,7 @@
                 ))))
 
 
-(defun pjx/this-file-switch ()
+(defun pjx/switch-file ()
   "Switch between buffers associated to files belonging to current project."
   (interactive)
   (helm
