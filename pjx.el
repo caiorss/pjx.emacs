@@ -100,8 +100,7 @@
 
 (defun pjx--get-project-buffers (project-name)
   "Returns all buffers that belongs to a project."
-  (remove-if-not (lambda (buf)
-		   (pjx--buffer-in-project-p project-name buf))
+  (remove-if-not (lambda (buf) (pjx--buffer-in-project-p project-name buf))
                  (buffer-list)))
 
 (defun pjx--project-close (proj-name)
