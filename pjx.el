@@ -174,13 +174,12 @@
    (lambda (proj-path)
 
      (mapc (lambda (buf)
-             (if (pjx--buffer-in-project-p
-                  (file-name-nondirectory proj-path) buf)
-                 (with-current-buffer buf
+             (with-current-buffer buf
                    ;; (save-buffer)
                    (kill-this-buffer)
-                   )))
-           (buffer-list))
+                   ))
+           (pjx--get-project-buffers
+            (file-name-nondirectory proj-path)))
 
      (let ((buf (get-file-buffer proj-path)))
        (when buf
