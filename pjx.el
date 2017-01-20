@@ -174,6 +174,7 @@
 
 (defun pjx/project-top ()
   "Open project top level directory."
+  (interactive)
   (dired (cdr (pjx--get-project-of-buffer))))
 
 
