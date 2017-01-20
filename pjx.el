@@ -91,7 +91,7 @@
                 ))))
 
 
-(defun pjx--get-buffer-project ()
+(defun pjx--get-project-of-buffer ()
   "Get the project the current buffer is associated with."
   (car (remove-if-not (lambda (proj) (pjx--buffer-in-project-p (car proj) (current-buffer)))
                       (pjx--get-opened-projects))))
@@ -139,8 +139,9 @@
 (defun pjx/project-compile ()
   "Run compilation command at project directory."
   (interactive)
-  (let ((default-directory (cdr (pjx--get-buffer-project))))
-    (compile (read-shell-command "$ > "))))
+  (let ((default-directory (cdr (pjx--get-project-of-buffer))))
+    (compile (read-shell-command "$ > " compile-command))))
+
 
 (defun pjx/project-close ()
   "Kill all buffers associated with a selected project."
