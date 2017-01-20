@@ -18,7 +18,7 @@
 (defun pjx--project-list ()
   "Returns all projects directories. See full doc."
   (mapcar (lambda (p) (cons (file-name-nondirectory p) p))
-          (pjx--directory-files pjx/project-root)))
+          (cdr (cdr (directory-files pjx-root-directory t)))))
 
 
 (defun pjx--project-path (project-name)
