@@ -209,6 +209,22 @@
                 (action     . switch-to-buffer)
                 ))))
 
+
+(defun pjx/this-file-switch ()
+  "Switch between buffers associated to files belonging to current project."
+  (interactive)
+  (helm
+   :prompt "Project File: "
+   :sources  `((
+                (name       . "Proj:")
+		
+                (candidates . ,(pjx--get-project-buffers-files
+                                (car (pjx--get-project-of-buffer))))
+
+                (action     . switch-to-buffer)
+                ))))
+
+
 ;;; **** Commands to Build Project / Compile *******
 
 (defun pjx/this-compile ()
