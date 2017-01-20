@@ -271,7 +271,7 @@
   "Find all project files recursively."
   (interactive)
   (helm
-   :prompt "Project Files"
+   :prompt "Project Files: "
    :sources  `((
                 (name       . "File: ")
                 (candidates . ,(pjx--find-project-files (car (pjx--get-project-of-buffer))
