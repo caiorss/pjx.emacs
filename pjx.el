@@ -14,7 +14,7 @@
 
 (setq pjx-ignore-suffix-list
       '( ".so" ".o" ".dll" ".exe" ".bin"
-         ".jar" ".class" ".war" ".tar" ".tgz" ".pdf" ".zip" ".pyc" ".elc"
+         ".jar" ".class" ".war" ".tar" ".tgz" ".pdf" ".zip" ".nupkg" ".pyc" ".elc"
          ".gif" ".png" ".jpg" ".jpeg" "~"
         ))
 
