@@ -123,13 +123,9 @@
                    ;; (save-buffer)
                    (kill-this-buffer)
                    ))
-        (pjx--get-project-buffers proj-name))
+        (pjx--get-project-buffers proj-name)))
 
-     ;; (let ((buf (get-file-buffer proj-path)))
-     ;;   (when buf
-     ;;     (with-current-buffer buf
-     ;;       (kill-this-buffer))))
-     )
+
 
 ;;; ====================  User Commands ======================== ;;;
 
