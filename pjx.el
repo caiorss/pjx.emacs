@@ -1,6 +1,8 @@
 (require 'cl)     ;; Provides common lisp emulation library.
 (require 'subr-x) ;; Provides string-remove-suffix and other string functions.
 
+(require 'dired-x) ;; Provides dired-omit-mode
+
 ;;; Refactor pjx project
 
 ;;; pjx Root directory
