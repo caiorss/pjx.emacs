@@ -62,17 +62,21 @@
   (mapcar (lambda (proj) (cons proj
                                (concat (file-name-as-directory pjx-root-directory)
                                        proj)))
-   (delete "."
-          (delete-dups
-           (mapcar (lambda (buf)
-                   (string-remove-suffix
-                    "/"
-                    (file-name-directory
-                     (file-relative-name (with-current-buffer buf
-                                           (or (buffer-file-name)
-                                               default-directory))
-                                         pjx-root-directory))))
-                   (pjx--get-buffers))))))
+          (remove-if-not (lambda (p) (and p (not (string-match-p "/" p))))
+           (delete "."
+              (delete-dups
+               (mapcar (lambda (buf)
+                         (string-remove-suffix
+                          "/"
+                          (file-name-directory
+                           (file-relative-name (with-current-buffer buf
+                                                 (or (buffer-file-name)
+                                                     default-directory))
+                                               pjx-root-directory)))
+
+                         )
+                       (pjx--get-buffers)))))))
+
 
 (defun pjx--project-select-callback (callback)
   "Select a project with helm and pass its path to the callback function."
