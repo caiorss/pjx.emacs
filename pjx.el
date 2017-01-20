@@ -1,4 +1,5 @@
-(require 'cl)
+(require 'cl)     ;; Provides common lisp emulation library.
+(require 'subr-x) ;; Provides string-remove-suffix and other string functions.
 
 ;;; Refactor pjx project
 
