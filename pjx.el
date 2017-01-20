@@ -1,303 +1,248 @@
-;;; pjx.el --- Project Manager for Emacs             -*- lexical-binding: nil; -*-
+(require 'cl)     ;; Provides common lisp emulation library.
+(require 'subr-x) ;; Provides string-remove-suffix and other string functions.
 
-;; Copyright (C) 2016  Caio Rodrigues Soares Silva
+(require 'dired-x) ;; Provides dired-omit-mode
 
-;; Author: Caio Rodrigues Soares Silva <caiorss.rodrigues@gmail.com>
-;; Keywords: project, manager, browser
+;;; Refactor pjx project
 
-;;; Commentary:
+;;; pjx Root directory
+;;;
+(setq pjx-root-directory "~/Documents/projects")
 
-;; Small Project manager for Emacs.
-
-;;; Code:
-
-
-
-(provide 'pjx)
-;;; pjx.el ends here
-
-(require 'cl)
-(require 'helm)
-
-(defgroup pjx nil
-  "Project Tool for Emacs"
-  :group 'tools
-  )
-
-(defcustom pjx/root
-  
-  (concat (file-name-as-directory user-emacs-directory)
-          "root")
-  "Pjx root directory:"
-  
-  :type 'string 
-  :group 'pjx
-  )
-
-(defcustom pjx/project-root "~/Documents/projects"
-  "path to Nuget executable file"
-  :type  'directory
-  :group 'pjx 
-  )
-
-(defcustom pjx/terminal "xfce4-terminal"
-  "Path to default terminal emulator. Default value xterm."
-  :type 'file
-  :group 'pjx 
-  )
+(setq pjx-current-project nil)
 
 
-(defvar pjx/project-file-blacklist
-  '(".o" ".bin" ".git" ".svn" )
+;;; ============== Internal functions and helpers ========== ;;
 
-  "Project file extensions which will be 
-   excluded from the helm selection.
-  ")
-
-(defvar pjx/current-project nil "Holds the current project name")
-
-
-(defun pjx--with-directory (directory fn)
-  "Runs a function fn inside a directory setting default-directory."
-  (let ((default-directory (file-name-as-directory directory)))
-    (funcall fn)))
-
-
-(defun pjx--file-in-directory-p (directory filename)
-  (equal (file-name-as-directory (expand-file-name (file-name-directory filename)))
-         (file-name-as-directory (expand-file-name directory))))
-
-
-(defun pjx--directory-files (directory)
-  "List a directory not showing files starting with (.), (~), (#) "
-  (remove-if-not
-   
-   (lambda (s)
-
-     (let (
-           (b (file-name-base s))
-           )
-
-       (not (or
-           
-             (equal ".." b)
-             (equal "." b)
-             (string-prefix-p ".#" b)
-             (string-suffix-p "~"  b )
-             (string-prefix-p "#" b)
-             (string-suffix-p "#" b)
-           ))))
-
-   (directory-files directory t)))
+(defun pjx--path-in-dir-p (root path)
+  "Check if path is in root directory."
+  (string-prefix-p (expand-file-name root) (expand-file-name path)))
 
 (defun pjx--project-list ()
   "Returns all projects directories. See full doc."
   (mapcar (lambda (p) (cons (file-name-nondirectory p) p))
-          (pjx--directory-files pjx/project-root)))
+          (cdr (cdr (directory-files pjx-root-directory t)))))
 
 
-(defun pjx--project-get-files ()
-  "Returns all files in project directory"
-  (mapcar (lambda (p) (cons (file-name-nondirectory p) p))          
-          (pjx--directory-files pjx/current-project))
-  )
+(defun pjx--project-path (project-name)
+  "Returns a path from a given project."
+  (concat (file-name-as-directory pjx-root-directory) project-name))
+
+(defun pjx--buffer-in-project-p (project-name buf)
+  "Test if a buffer belongs to a project."
+  (pjx--path-in-dir-p
+   (pjx--project-path project-name)
+   (with-current-buffer buf
+                        (or (buffer-file-name)
+                            default-directory))))
 
 
-(defun pjx--project-get-git-files ()
-  "Returns a list of files tracked by git in project master branch."
-  (let* (
-         (default-directory (file-name-as-directory pjx/current-project))
-         (outp   (shell-command-to-string "git ls-tree -r master --name-only"))
-         )
 
-    (split-string (replace-regexp-in-string "\n+$" "" outp) "\n")))
-
-
-(defun pjx--project-get-buffers ()
-  "Get all buffers related to current project."
-  (mapcar (lambda (b) (cons (buffer-name b) b))
-          
-          (remove-if-not (lambda (b)
-                           (and (buffer-file-name b)
-                                (pjx--file-in-directory-p  pjx/current-project
-                                                          (buffer-file-name b))))
-
-                         (buffer-list)
-                   )))
-
-(defun pjx--project-helm-fn (callback)
+;; Select a project and call the functions callback
+;; as (callback <project-path>) like (callback "~/Documents/projects/test-cpp")
+;;
+(defun pjx--project-open-callback (callback)
   ""
   (helm
    :prompt "Project: "
    :sources  `((
                 (name       . "Pjx: ")
                 (candidates . ,(pjx--project-list))
-                (action     . callback)
+                (action     . (lambda (proj) (setq pjx-current-project proj)
+                                             (funcall callback proj)))
                 ))))
 
+(defun pjx--get-buffers ()
+  "Return all buffers which file name or default directory is in `pjx-root-directory`"
+  (cl-remove-if-not (lambda (buf)
+                      (pjx--path-in-dir-p pjx-root-directory
+                                        (with-current-buffer buf
+                                          (or (buffer-file-name)
+                                              default-directory))))
+                    (buffer-list)))
 
-(defun pjx--project-files-helm-fn (callback)
+
+(defun pjx--get-opened-projects ()
+  "Return a list with all opened projects."
+  (mapcar (lambda (proj) (cons proj
+                               (concat (file-name-as-directory pjx-root-directory)
+                                       proj)))
+          (remove-if-not (lambda (p) (and p (not (string-match-p "/" p))))
+           (delete "."
+              (delete-dups
+               (mapcar (lambda (buf)
+                         (string-remove-suffix
+                          "/"
+                          (file-name-directory
+                           (file-relative-name (with-current-buffer buf
+                                                 (or (buffer-file-name)
+                                                     default-directory))
+                                               pjx-root-directory)))
+
+                         )
+                       (pjx--get-buffers)))))))
+
+
+(defun pjx--project-select-callback (callback)
+  "Select a project with helm and pass its path to the callback function."
   (helm
-   :prompt "Project File: " 
+   :prompt "Project: "
    :sources  `((
-                (name       . "Dir: ")
-                (candidates . ,(pjx--project-get-files))
-                (action     . callback)
+                (name       . "Pjx: ")
+                (candidates . ,(pjx--get-opened-projects))
+                (action     .  callback)
                 ))))
 
 
-(defun pjx--project-buffers-helm-fn (callback)
-  (helm
-   :prompt "Project File: " 
-   :sources  `((
-                (name       . "Dir: ")
-                (candidates . ,(pjx--project-get-buffers))
-                (action     . callback)
-                ))))
+(defun pjx--get-project-of-buffer ()
+  "Get the project the current buffer is associated with."
+  (car (remove-if-not (lambda (proj) (pjx--buffer-in-project-p (car proj) (current-buffer)))
+                      (pjx--get-opened-projects))))
 
 
-;;;;============== User Commands ================ ;;
-;;  @SECTION: User commands 
-;;
+(defun pjx--get-project-buffers (project-name)
+  "Returns all buffers that belongs to a project."
+  (remove-if-not (lambda (buf) (pjx--buffer-in-project-p project-name buf))
+                 (buffer-list)))
 
-(defun pjx/root-dired ()
-  "Open root directory"
+(defun pjx--get-project-buffers-files (project-name)
+  "Returns all buffers that belongs to a project."
+  (mapcar (lambda (buf)
+            (cons (file-relative-name (buffer-file-name buf)
+                                      (pjx--project-path project-name))
+                              buf))
+          (remove-if-not (lambda (buf)
+                           (and (buffer-file-name buf)
+                                     (pjx--buffer-in-project-p project-name buf)))
+                    (buffer-list))))
+
+
+
+(defun pjx--project-close (proj-name)
+  "Close/kill all buffers belonging to a project."
+  (mapc (lambda (buf)
+             (with-current-buffer buf
+                   ;; (save-buffer)
+                   (kill-this-buffer)
+                   ))
+        (pjx--get-project-buffers proj-name)))
+
+
+
+;;; ====================  User Commands ======================== ;;;
+
+;;; =====> Commands to Open Project
+
+(defun pjx/dired ()
+  "Open root project directory."
   (interactive)
-  (dired pjx/project-root))
+  (dired pjx-root-directory)
+  (dired-omit-mode)
+  (dired-hide-details-mode))
 
-(defun pjx/commands ()
-  "Show all pjx/ commands to the user"
+(defun pjx/dired-frame ()
+  "Open root project directory in a new frame."
   (interactive)
-  (command-apropos "pjx/"))
+  (dired-other-frame pjx-root-directory))
 
-(defun pjx/helm ()
+(defun pjx/project-open ()
   "Select project directory and open it in dired-mode."
   (interactive)
-  (pjx--project-helm-fn (lambda (p)                         
-                         (setq pjx/current-project p)
-                         ;;(dired p)
-                         (when pjx/current-project                                             (pjx/close))
-                         (setq pjx/current-project p)
-                         (dired p)
-                         )))
+  (pjx--project-open-callback (lambda (path)
+                                (dired path)
+                                (dired-omit-mode)
+                                (dired-hide-details-mode)
+                                )))
 
-
-(defun pjx/helm-select ()
-  "Select project directory."
+(defun pjx/project-open-frame ()
+  "Open project in a new frame."
   (interactive)
-  (pjx--project-helm-fn (lambda (p)                         
-                         (setq pjx/current-project p)
-                         ;;(dired p)
+  (pjx--project-open-callback (lambda (path)
+                                (dired-other-frame path)
+                                (dired-omit-mode)
+                                (dired-hide-details-mode)
+                                )))
 
-                         (if pjx/current-project
-                             (progn  (pjx/close)
-                                     (setq pjx))
+;;; ****** Commands to close a project ********************** ;;
 
-                           (setq pjx/current-project p)
-                           )
-                         )))
 
-(defun pjx/dir ()
-  "Open current project set with pjx/helm.
-It opens the directory stored in variable: `pjx/current-project`"
+(defun pjx/project-close ()
+  "Kill all buffers associated with a selected project."
   (interactive)
-  (dired pjx/current-project))
+  (pjx--project-select-callback
+   (lambda (path)
+     (pjx--project-close
+      (file-name-nondirectory path)))))
 
-(defun pjx/file-open  ()
-  "Select a file of current project and open it."
+(defun pjx/this-close ()
+  "Kill all buffers associated with a current project."
   (interactive)
-  (pjx--project-files-helm-fn #'find-file))
+  (pjx--project-close (pjx--get-project-of-buffer)))
 
-(defun pjx/file-git-open-all ()
-  "Open all files listed in git current branch."
+;; **** Commands to switch between project directories ****** ;;
+
+
+(defun pjx/project-switch-dir ()
+  "Switch to project directory"
   (interactive)
-  (let ((default-directory  (file-name-as-directory pjx/current-project)))
-    (mapc #'find-file-noselect (pjx--project-get-git-files))
-    (dired pjx/current-project)
-    ))
+  (pjx--project-select-callback #'dired))
 
-(defun pjx/file-switch ()
-  "Switch between project files."
+(defun pjx/project-switch-dir-window ()
+  "Switch to project directory in other window."
   (interactive)
-  (pjx--project-buffers-helm-fn #'switch-to-buffer))
+  (pjx--project-select-callback #'dired-other-window))
 
-
-(defun pjx/panel ()
-  "Opens a vertical panel containing the project files."
+(defun pjx/project-switch-dir-frame ()
+  "Switch to project directory in other window."
   (interactive)
-  (split-window-horizontally)  
-  (with-current-buffer  (dired-other-window pjx/current-project)      
-    (dired-omit-mode)
-    (dired-hide-details-mode)
-    ))
+  (pjx--project-select-callback #'dired-other-frame))
 
-(defun pjx/close ()
-  "Close all files belonging to the current project."
+;;; *** Commands for project navigation and file selection ***** ;; 
+
+
+;;; Go to current project root directory
+(defun pjx/this-top ()
+  "Go to current project root directory."
   (interactive)
-  
-  (mapc (lambda (b)
-          (let
-              (
-               (file-path (buffer-file-name b))
-               )
-            
-            (if (and file-path (pjx--file-in-directory-p pjx/current-project file-path))
+  (dired (cdr (pjx--get-project-of-buffer))))
 
-                (with-current-buffer b
-                  (save-buffer)
-                  (kill-buffer b)
-
-                  ))))
-
-
-        (buffer-list))
-
-  (message "Project files closed"))
-   ;; End of pxj/close
-
-
-(defun pjx/dired-move ()
-  "Move selected directory in dired-mode to project-root directory."
+(defun pjx/this-buffer-switch ()
+  "Switch between buffers belonging to current project."
   (interactive)
-  (let* (
-        ;; Current directory at point 
-        (dir            (dired-file-name-at-point))
-        ;; Name without path 
-        (base-name      (file-name-nondirectory dir))
-        ;;
-        (new-name       (concat (file-name-as-directory pjx/project-root)
-                             base-name
-                             ))
-        )
+  (helm
+   :prompt "Project File: "
+   :sources  `((
+                (name       . "Proj:")
+		
+                (candidates . ,(mapcar (lambda (p) (cons (buffer-name p) p))
+                                       (pjx--get-project-buffers
+                                        (car (pjx--get-project-of-buffer)))))
 
-    (rename-file dir new-name)
-    (dired new-name)))
+                (action     . switch-to-buffer)
+                ))))
 
 
-(defun pjx/term ()
-  "Launch terminal Emulator at project directory."
-
+(defun pjx/this-file-switch ()
+  "Switch between buffers associated to files belonging to current project."
   (interactive)
-  
-  (pjx--with-directory pjx/current-project
-                      (lambda ()
-                        (start-process "term.proj" ;; Process name 
-                                       nil ;; buffer name
-                                       pjx/terminal
-                                       ))))
+  (helm
+   :prompt "Project File: "
+   :sources  `((
+                (name       . "Proj:")
+		
+                (candidates . ,(pjx--get-project-buffers-files
+                                (car (pjx--get-project-of-buffer))))
 
-(defun pjx/project-new ()
-  "Creates a new project."
+                (action     . switch-to-buffer)
+                ))))
+
+
+;;; **** Commands to Build Project / Compile *******
+
+(defun pjx/this-compile ()
+  "Run compilation command at current project directory."
   (interactive)
-  (pjx--with-directory pjx/project-root
-
-                      (lambda ()
-                        (let
-                            ((project-name  (read-string "Project Name: ")))
-
-                          (make-directory project-name)
-                          (dired project-name)))))
+  (let ((default-directory (cdr (pjx--get-project-of-buffer))))
+    (compile (read-shell-command "$ > " compile-command))))
 
 
-(provide 'pjx)
-;;; pjx.el ends here
