@@ -183,9 +183,12 @@
   (helm
    :prompt "Project File: "
    :sources  `((
-                (name       . "Dir: ")
-                (candidates . ,(pjx--get-project-buffers
-                                (pjx--get-project-of-buffer)))
+                (name       . "Proj:")
+		
+                (candidates . ,(mapcar (lambda (p) (cons (buffer-name p) p))
+                                       (pjx--get-project-buffers
+                                        (car (pjx--get-project-of-buffer)))))
+
                 (action     . switch-to-buffer)
                 ))))
 
