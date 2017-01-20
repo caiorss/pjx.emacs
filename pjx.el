@@ -138,6 +138,25 @@
 
 
 
+
+(defun pjx--find-files-by-regex (proj-name regex)
+  (let ((path (pjx--project-path proj-name)))
+
+    (mapcar (lambda (file) (cons (file-relative-name file path)
+                                 file))
+     (directory-files-recursively path regex))))
+
+(defun pjx--find-project-files (proj ignore-prefix-list ignore-suffix-list)
+  (remove-if (lambda (cell)
+               (let ((s (car cell)))
+                (or  (string-match-p "\\.git" s)
+                    (some  (lambda (ext) (string-suffix-p ext s))
+                           ignore-suffix-list)
+                    (some  (lambda (pre) (string-prefix-p pre s))
+                           ignore-prefix-list))))
+               (pjx--find-files-by-regex proj ".")))
+
+
 ;;; ====================  User Commands ======================== ;;;
 
 ;;; =====> Commands to Open Project
