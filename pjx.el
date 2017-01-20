@@ -97,6 +97,12 @@
                       (pjx--get-opened-projects))))
 
 
+(defun pjx--get-project-buffers (project-name)
+  "Returns all buffers that belongs to a project."
+  (remove-if-not (lambda (buf) (pjx--buffer-in-project-p proj buf))
+                 (buffer-list)))
+
+
 ;;; ============  User Commands ====================== ;;;
 
 
@@ -141,6 +147,22 @@
   (interactive)
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
     (compile (read-shell-command "$ > " compile-command))))
+
+(defun pjx/project-top ()
+  "Open project top level directory."
+  (dired (cdr (pjx--get-project-of-buffer))))
+
+
+(defun pjx/buffer-switch ()
+  (interactive)
+  (helm
+   :prompt "Project File: "
+   :sources  `((
+                (name       . "Dir: ")
+                (candidates . ,(pjx--get-project-buffers
+                                (pjx--get-project-of-buffer)))
+                (action     . switch-to-buffer)
+                ))))
 
 
 (defun pjx/project-close ()
