@@ -136,7 +136,9 @@
 (defun pjx/dired ()
   "Open root project directory."
   (interactive)
-  (dired pjx-root-directory))
+  (dired pjx-root-directory)
+  (dired-omit-mode)
+  (dired-hide-details-mode))
 
 (defun pjx/dired-frame ()
   "Open root project directory in a new frame."
@@ -146,12 +148,20 @@
 (defun pjx/project-open ()
   "Select project directory and open it in dired-mode."
   (interactive)
-  (pjx--project-open-callback #'dired))
+  (pjx--project-open-callback (lambda (path)
+                                (dired path)
+                                (dired-omit-mode)
+                                (dired-hide-details-mode)
+                                )))
 
 (defun pjx/project-open-frame ()
   "Open project in a new frame."
   (interactive)
-  (pjx--project-open-callback #'dired-other-frame))
+  (pjx--project-open-callback (lambda (path)
+                                (dired-other-frame path)
+                                (dired-omit-mode)
+                                (dired-hide-details-mode)
+                                )))
 
 ;;; ****** Commands to close a project ********************** ;;
 
