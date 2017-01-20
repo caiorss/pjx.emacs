@@ -282,6 +282,26 @@
                 ))))
 
 
+(defun pjx/find-file-regex ()
+  "Find all project files recursively."
+  (interactive)
+  (helm
+   :prompt "Project Files: "
+   :sources  `((
+                (name       . "File: ")
+                                
+                (candidates . ,(remove-if (lambda (cell) (let ((s (car cell)))
+                                                           (or (string-suffix-p "~" (car cell))
+                                                               (string-prefix-p "#" (car cell))
+                                                               )))
+                                (pjx--find-files-by-regex (car (pjx--get-project-of-buffer))
+                                                            (read-regexp "Pattern: ")
+                                                            )))
+                (action     .  find-file)
+                ))))
+
+
+
 ;;; **** Commands to Build Project / Compile *******
 
 (defun pjx/compile ()
