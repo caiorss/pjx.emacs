@@ -12,6 +12,15 @@
 (setq pjx-current-project nil)
 
 
+(setq pjx-ignore-suffix-list
+      '( ".so" ".o" ".dll" ".exe" ".bin"
+         ".jar" ".class" ".war" ".tar" ".tgz" ".pdf" ".zip" ".pyc" ".elc"
+        ))
+
+(setq pjx-ignore-prefix-list
+      '("target" "project" "images" "dist" "bin" "build"))
+
+
 ;;; ============== Internal functions and helpers ========== ;;
 
 (defun pjx--path-in-dir-p (root path)
