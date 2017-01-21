@@ -1,4 +1,16 @@
-;; -*- coding: utf-8; lexical-binding: nil -*-
+;;; pjx.el --- Project management tool for Emacs.
+;;
+;; Filename: pjx.el 
+;; Description:  Project management tool for Emacs.
+;; Author: Caio Rodrigues Soares Silva
+;; Version: 0
+;; Keywords: project, management, navigation, tool, utils 
+;;
+;; 
+
+;;; Code
+
+
 (eval-when-compile (require 'cl))
 
 ;; (require 'cl)     ;; Provides common lisp emulation library.
@@ -331,7 +343,6 @@
                 ))))
 
 
-
 ;;; **** Commands to Build Project / Compile *******
 
 (defun pjx/compile ()
@@ -340,4 +351,9 @@
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
     (compile (read-shell-command "$ > " compile-command))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(provide 'pjx)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; EOF - END OF FILE 
