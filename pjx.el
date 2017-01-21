@@ -1,4 +1,8 @@
-(require 'cl)     ;; Provides common lisp emulation library.
+;; -*- coding: utf-8; lexical-binding: nil -*-
+(eval-when-compile (require 'cl))
+
+;; (require 'cl)     ;; Provides common lisp emulation library.
+
 (require 'subr-x) ;; Provides string-remove-suffix and other string functions.
 
 (require 'dired-x) ;; Provides dired-omit-mode
@@ -126,8 +130,6 @@
                                      (pjx--buffer-in-project-p project-name buf)))
                     (buffer-list))))
 
-
-
 (defun pjx--project-close (proj-name)
   "Close/kill all buffers belonging to a project."
   (mapc (lambda (buf)
@@ -136,8 +138,6 @@
                    (kill-this-buffer)
                    ))
         (pjx--get-project-buffers proj-name)))
-
-
 
 
 (defun pjx--find-files-by-regex (proj-name regex ignore-prefix-list ignore-suffix-list )
@@ -186,14 +186,38 @@
                                 (dired-hide-details-mode)
                                 )))
 
+
+(defun pjx/frame-proj-files ()
+  "Set the keybindings C-x right and C-x left switch between project buffers with files."
+  (interactive)
+  (set-frame-parameter
+        nil
+        'buffer-predicate
+        (lambda (buf)
+               ;; Test if buffer is associated to file or major mode is dired mode.
+          (and (or (buffer-file-name buf) (equal 'dired-mode (buffer-local-value 'major-mode buf)))
+               ;; Test if buffer is in project.
+               (pjx--buffer-in-project-p (frame-parameter nil 'frame-project) buf)))))
+
 (defun pjx/open-frame ()
   "Open project in a new frame."
   (interactive)
-  (pjx--project-open-callback (lambda (path)
-                                (dired-other-frame path)
-                                (dired-omit-mode)
-                                (dired-hide-details-mode)
-                                )))
+  (pjx--project-open-callback
+   (lambda (path)
+     (let ((proj (file-name-nondirectory path)))
+       (dired-other-frame path)
+       (dired-omit-mode)
+       (dired-hide-details-mode)
+       (set-frame-name (concat "Proj: "  proj))
+
+
+        ;;; Set current project as frame project
+       (set-frame-parameter nil 'frame-project proj)
+
+       ;; C-x left or C-x right switches only between
+       ;; buffer files.
+       (pjx/frame-proj-files)
+       ))))
 
 ;;; ****** Commands to close a project ********************** ;;
 
@@ -210,6 +234,12 @@
   "Kill all buffers associated with a current project."
   (interactive)
   (pjx--project-close (car (pjx--get-project-of-buffer))))
+
+(defun pjx/close-frame ()
+  "Kill all buffers related to current project and close current project frame."
+  (interactive)
+  (pjx/close)
+  (delete-frame))
 
 ;; **** Commands to switch between project directories ****** ;;
 
