@@ -186,6 +186,19 @@
                                 (dired-hide-details-mode)
                                 )))
 
+
+(defun pjx/frame-proj-files ()
+  "Set the keybindings C-x right and C-x left switch between project buffers with files."
+  (interactive)
+  (set-frame-parameter
+        nil
+        'buffer-predicate
+        (lambda (buf)
+               ;; Test if buffer is associated to file or major mode is dired mode.
+          (and (or (buffer-file-name buf) (equal 'dired-mode (buffer-local-value 'major-mode buf)))
+               ;; Test if buffer is in project.
+               (pjx--buffer-in-project-p (frame-parameter nil 'frame-project) buf)))))
+
 (defun pjx/open-frame ()
   "Open project in a new frame."
   (interactive)
