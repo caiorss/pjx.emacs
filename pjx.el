@@ -130,8 +130,6 @@
                                      (pjx--buffer-in-project-p project-name buf)))
                     (buffer-list))))
 
-
-
 (defun pjx--project-close (proj-name)
   "Close/kill all buffers belonging to a project."
   (mapc (lambda (buf)
@@ -140,8 +138,6 @@
                    (kill-this-buffer)
                    ))
         (pjx--get-project-buffers proj-name)))
-
-
 
 
 (defun pjx--find-files-by-regex (proj-name regex ignore-prefix-list ignore-suffix-list )
