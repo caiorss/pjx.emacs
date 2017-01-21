@@ -235,6 +235,12 @@
   (interactive)
   (pjx--project-close (car (pjx--get-project-of-buffer))))
 
+(defun pjx/close-frame ()
+  "Kill all buffers related to current project and close current project frame."
+  (interactive)
+  (pjx/close)
+  (delete-frame))
+
 ;; **** Commands to switch between project directories ****** ;;
 
 
