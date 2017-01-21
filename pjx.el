@@ -12,6 +12,16 @@
 (setq pjx-current-project nil)
 
 
+(setq pjx-ignore-suffix-list
+      '( ".so" ".o" ".dll" ".exe" ".bin"
+         ".jar" ".class" ".war" ".tar" ".tgz" ".pdf" ".zip" ".nupkg" ".pyc" ".elc"
+         ".gif" ".png" ".jpg" ".jpeg" "~"
+        ))
+
+(setq pjx-ignore-prefix-list
+      '("target/" "project/" "images/" "dist/" "bin/" "build/" "packages/" "obj/" "tmp/" "#"))
+
+
 ;;; ============== Internal functions and helpers ========== ;;
 
 (defun pjx--path-in-dir-p (root path)
@@ -129,23 +139,45 @@
 
 
 
+
+(defun pjx--find-files-by-regex (proj-name regex ignore-prefix-list ignore-suffix-list )
+  (let ((path (pjx--project-path proj-name)))
+    (remove-if (lambda (cell)
+               (let ((s (car cell)))
+                (or  (string-match-p "\\.git" s)
+                    (some  (lambda (ext) (string-suffix-p ext s))
+                           ignore-suffix-list)
+                    (some  (lambda (pre) (string-prefix-p pre s))
+                           ignore-prefix-list))))
+
+               (mapcar (lambda (file) (cons (file-relative-name file path)
+                                            file))
+                       (directory-files-recursively path regex)))))
+
+(defun pjx--find-project-files (proj ignore-prefix-list ignore-suffix-list)
+  (pjx--find-files-by-regex proj
+                            "."
+                            ignore-prefix-list
+                            ignore-suffix-list))
+
+
 ;;; ====================  User Commands ======================== ;;;
 
 ;;; =====> Commands to Open Project
 
-(defun pjx/dired ()
+(defun pjx/root-dired ()
   "Open root project directory."
   (interactive)
   (dired pjx-root-directory)
   (dired-omit-mode)
   (dired-hide-details-mode))
 
-(defun pjx/dired-frame ()
+(defun pjx/root-dired-frame ()
   "Open root project directory in a new frame."
   (interactive)
   (dired-other-frame pjx-root-directory))
 
-(defun pjx/project-open ()
+(defun pjx/open ()
   "Select project directory and open it in dired-mode."
   (interactive)
   (pjx--project-open-callback (lambda (path)
@@ -154,7 +186,7 @@
                                 (dired-hide-details-mode)
                                 )))
 
-(defun pjx/project-open-frame ()
+(defun pjx/open-frame ()
   "Open project in a new frame."
   (interactive)
   (pjx--project-open-callback (lambda (path)
@@ -174,10 +206,10 @@
      (pjx--project-close
       (file-name-nondirectory path)))))
 
-(defun pjx/this-close ()
+(defun pjx/close ()
   "Kill all buffers associated with a current project."
   (interactive)
-  (pjx--project-close (pjx--get-project-of-buffer)))
+  (pjx--project-close (car (pjx--get-project-of-buffer))))
 
 ;; **** Commands to switch between project directories ****** ;;
 
@@ -201,12 +233,12 @@
 
 
 ;;; Go to current project root directory
-(defun pjx/this-top ()
+(defun pjx/top ()
   "Go to current project root directory."
   (interactive)
   (dired (cdr (pjx--get-project-of-buffer))))
 
-(defun pjx/this-buffer-switch ()
+(defun pjx/switch ()
   "Switch between buffers belonging to current project."
   (interactive)
   (helm
@@ -222,7 +254,7 @@
                 ))))
 
 
-(defun pjx/this-file-switch ()
+(defun pjx/switch-file ()
   "Switch between buffers associated to files belonging to current project."
   (interactive)
   (helm
@@ -237,9 +269,42 @@
                 ))))
 
 
+
+(defun pjx/find-file ()
+  "Find all project files recursively."
+  (interactive)
+  (helm
+   :prompt "Project Files: "
+   :sources  `((
+                (name       . "File: ")
+                (candidates . ,(pjx--find-project-files (car (pjx--get-project-of-buffer))
+                                                        pjx-ignore-prefix-list
+                                                        pjx-ignore-suffix-list
+                                                        ))
+                (action     .  find-file)
+                ))))
+
+
+(defun pjx/find-file-regex ()
+  "Find all project files recursively."
+  (interactive)
+  (helm
+   :prompt "Project Files: "
+   :sources  `((
+                (name       . "File: ")
+                                
+                (candidates . ,(pjx--find-files-by-regex (car (pjx--get-project-of-buffer))
+                                                         (read-regexp "Pattern: ")
+                                                         pjx-ignore-prefix-list
+                                                         pjx-ignore-suffix-list))
+                (action     .  find-file)
+                ))))
+
+
+
 ;;; **** Commands to Build Project / Compile *******
 
-(defun pjx/this-compile ()
+(defun pjx/compile ()
   "Run compilation command at current project directory."
   (interactive)
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
