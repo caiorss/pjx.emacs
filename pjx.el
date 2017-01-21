@@ -1,12 +1,64 @@
-;;; pjx.el --- Project management tool for Emacs.
-;;
+;;; pjx.el --- Project management tool for Emacs.  -*- lexical-binding: nil; -*-
+
+;; Copyright (C) 2016  Caio Rodrigues Soares Silva
+
 ;; Filename: pjx.el 
-;; Description:  Project management tool for Emacs.
-;; Author: Caio Rodrigues Soares Silva
+;; Author: Caio Rodrigues       <caiorss DOT rodrigues AT gmail DOT com>
+;; Maintainer: Caio Rordrigues  <caiorss DOT rodrigues AT gmail DOT com>
+;; Keywords: project, automation, search, tool, management
 ;; Version: 0
-;; Keywords: project, management, navigation, tool, utils 
+;; URL: https://www.github.com/caiorss/pjx
+;; Package-Requires: ((helm-core "2.0") (cl-lib "0.5"))
+;; Description:  Project management tool for Emacs.
+
+
+;;; Commentary
+
+;; pjx - Provides commands to manipulate and manage software projects.
+;; Features:
 ;;
-;; 
+;;  - Open a project in a new frame and assign the frame to the project name.
+;;
+;;  - C-x right (M-x next-buffer) and C-x left (M-x previous-buffer)
+;;    switches only between project buffers. 
+;;
+;;  - Close project by killing all buffers that belongs to the project. 
+;;
+;;  - Run compilation command at project root directory.
+;;  
+;;  - Find files in projects
+;;
+;;  - Switch between project files
+;;
+
+;;; Licence
+
+;; This is free and unencumbered software released into the public domain.
+;;
+;; Anyone is free to copy, modify, publish, use, compile, sell, or
+;; distribute this software, either in source code form or as a compiled
+;; binary, for any purpose, commercial or non-commercial, and by any
+;; means.
+;;
+;; In jurisdictions that recognize copyright laws, the author or authors
+;; of this software dedicate any and all copyright interest in the
+;; software to the public domain. We make this dedication for the benefit
+;; of the public at large and to the detriment of our heirs and
+;; successors. We intend this dedication to be an overt act of
+;; relinquishment in perpetuity of all present and future rights to this
+;; software under copyright law.
+;;
+;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+;; IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+;; OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+;; ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+;; OTHER DEALINGS IN THE SOFTWARE.
+;;
+;; For more information, please refer to <http://unlicense.org/>
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; Code
 
