@@ -183,6 +183,14 @@
   (remove-if-not (lambda (buf) (pjx--buffer-in-project-p project-name buf))
                  (buffer-list)))
 
+(defun pjx--filter-project-buffers (project-name predicate selector)
+  "Filter all buffers that belongs to a project."
+  (mapcar (lambda (buf) (cons (funcall selector buf) buf))
+          (remove-if-not (lambda (buf)
+                              (and (pjx--buffer-in-project-p project-name buf)
+                                   (funcall predicate buf)))
+                            (buffer-list))))
+
 (defun pjx--get-project-buffers-files (project-name)
   "Returns all buffers that belongs to a project."
   (mapcar (lambda (buf)
