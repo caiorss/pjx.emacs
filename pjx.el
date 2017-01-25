@@ -87,7 +87,9 @@
         ))
 
 (setq pjx-ignore-prefix-list
-      '("target/" "project/" "images/" "dist/" "bin/" "build/" "packages/" "obj/" "tmp/" "#"))
+      '("target/" "project/" "images/" "dist/" "bin/" "build/" "packages/" "obj/" "tmp/" "#"
+        "sandbox/elpa"
+        ))
 
 
 ;;; ============== Internal functions and helpers ========== ;;
