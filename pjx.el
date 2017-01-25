@@ -198,12 +198,11 @@
   (mapcar (lambda (buf)
             (cons (file-relative-name (buffer-file-name buf)
                                       (pjx--project-path project-name))
-                              buf))
-          (remove-if-not (lambda (buf)
-                           (and (buffer-file-name buf)
-                                     (pjx--buffer-in-project-p project-name buf)))
-                    (buffer-list))))
-
+                  buf))
+          (pjx--filter-project-buffers
+           (lambda (buf) (and (buffer-file-name buf)
+                              (pjx--buffer-in-project-p project-name buf))))))
+          
 (defun pjx--project-close (proj-name)
   "Close/kill all buffers belonging to a project."
   (mapc (lambda (buf)
