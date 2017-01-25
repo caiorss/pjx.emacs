@@ -433,6 +433,28 @@
                 (action     .  find-file)
                 ))))
 
+(defun pjx/find-file-ext ()
+  "Find all project files recursively by extensions.
+Examples:
+- M-x pjx/find-file-ext fs fsx  -> Will find all projects with .fs and .fsx extension."
+  (interactive)
+  (helm
+   :prompt "Project Files: "
+   :sources  `((
+                (name       . "File: ")
+
+                (candidates . ,(pjx--find-files-by-regex
+                                (car (pjx--get-project-of-buffer))
+                                (mapconcat 'identity
+                                           (mapcar (lambda (ext) (format "\\.%s$" ext))
+                                                   (split-string (read-string "Extension:  ")))
+                                           "\\\|")
+
+                                pjx-ignore-prefix-list
+                                pjx-ignore-suffix-list))
+                (action     .  find-file)
+                ))))
+
 
 ;;; **** Commands to Build Project / Compile *******
 
