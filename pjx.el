@@ -419,7 +419,7 @@
 
 
 (defun pjx/find-file-regex ()
-  "Find all project files recursively."
+  "Find all project files recursively matching a regex."
   (interactive)
   (helm
    :prompt "Project Files: "
