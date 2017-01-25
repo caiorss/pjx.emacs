@@ -465,6 +465,19 @@ Examples:
                              pjx-ignore-prefix-list
                              pjx-ignore-suffix-list)))
 
+(defun pjx/open-files-ext ()
+  "Open all project files with given extensions."
+  (interactive)
+  (mapc  (lambda (cell) (find-file-noselect (cdr cell)))
+   (pjx--find-files-by-regex
+   (car (pjx--get-project-of-buffer))
+   (mapconcat 'identity
+              (mapcar (lambda (ext) (format "\\.%s$" ext))
+                      (split-string (read-string "Extension:  ")))
+              "\\\|")
+   pjx-ignore-prefix-list
+   pjx-ignore-suffix-list)))
+
 ;;; **** Commands to Build Project / Compile *******
 
 (defun pjx/compile ()
