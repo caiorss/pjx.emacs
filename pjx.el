@@ -227,6 +227,14 @@
 
 ;;; ====================  User Commands ======================== ;;;
 
+;;; =====> Help Commands
+
+(defun pjx/help ()
+  "Show pjx commands help."
+  (interactive)
+  (command-apropos "pjx/"))
+
+
 ;;; =====> Commands to Open Project
 
 (defun pjx/root-dired ()
