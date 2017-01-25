@@ -440,7 +440,8 @@
   "Run compilation command at current project directory."
   (interactive)
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
-    (compile (read-shell-command "$ > " compile-command))))
+    (call-interactively #'compile)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
