@@ -372,8 +372,11 @@
    :sources  `((
                 (name       . "Proj:")
 		
-                (candidates . ,(pjx--get-project-buffers-files
-                                (car (pjx--get-project-of-buffer))))
+                (candidates . ,(pjx--filter-project-buffers (car (pjx--get-project-of-buffer))
+                                                            #'buffer-file-name
+                                                            (lambda (buf)
+                                                              (file-relative-name (buffer-file-name buf)
+                                                                                  (cdr (pjx--get-project-of-buffer))))))
 
                 (action     . switch-to-buffer)
                 ))))
