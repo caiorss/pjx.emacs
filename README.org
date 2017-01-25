@@ -10,3 +10,24 @@ Wishlist / Requirements:
  - Integrate to build system
  - Provide higher order functions
  - Close and Open a set of files
+
+Features: 
+
+ - switch between project buffers
+
+ - switch between project dired buffers
+
+ - switch between project buffers associated to files
+
+ - find files in project sub-directories
+
+ - find files in project sub-directories matching a regex
+
+ - close all project files
+
+ - open a project in a new frame dedicated to the project. The
+   commands C-x right (M-x next-buffer) and C-x left (M-x
+   previous-buffer) switches only between project buffer files.
+
+ - Run compilation commands and make specific commands at project root
+   directory.
