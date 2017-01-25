@@ -456,6 +456,15 @@ Examples:
                 ))))
 
 
+(defun pjx/open-files-regex ()
+  "Open all project files matching regex recursively."
+  (interactive)
+  (mapc  (lambda (cell) (find-file-noselect (cdr cell)))
+         (pjx--find-files-by-regex (car (pjx--get-project-of-buffer))
+                             (read-regexp "Pattern: ")
+                             pjx-ignore-prefix-list
+                             pjx-ignore-suffix-list)))
+
 ;;; **** Commands to Build Project / Compile *******
 
 (defun pjx/compile ()
