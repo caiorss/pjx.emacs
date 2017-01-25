@@ -455,7 +455,7 @@
     (call-interactively #'compile "make ")))
 
 (defun pjx/make-clean ()
-  "Run '$ make clean' at project root directory and execute Makefile main rule."
+  "Run '$ make clean' at project root directory and execute Makefile clean rule."
   (interactive)
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
     (compile "make clean")))
