@@ -448,6 +448,12 @@
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
     (compile "make ")))
 
+(defun pjx/make-cmd ()
+  "Run $ make at project root directory asking the user the make command to run."
+  (interactive)
+  (let ((default-directory (cdr (pjx--get-project-of-buffer))))
+    (call-interactively #'compile "make ")))
+
 (defun pjx/make-clean ()
   "Run '$ make clean' at project root directory and execute Makefile main rule."
   (interactive)
