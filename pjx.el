@@ -382,6 +382,25 @@
                 ))))
 
 
+(defun pjx/switch-dir ()
+  "Switch between dired buffers within the current project."
+  (interactive)
+  (helm
+   :prompt "Project File: "
+   :sources  `((
+                (name       . "Proj:")
+
+                (candidates . ,(pjx--filter-project-buffers (car (pjx--get-project-of-buffer))
+                                                            (lambda (buf) (equal 'dired-mode
+                                                                                 (buffer-local-value 'major-mode buf)))
+                                                            (lambda (buf) (file-relative-name
+                                                                           (buffer-local-value 'default-directory buf)
+                                                                           (cdr (pjx--get-project-of-buffer))
+                                                                           ))))
+
+                (action     . switch-to-buffer)
+                ))))
+
 
 (defun pjx/find-file ()
   "Find all project files recursively."
