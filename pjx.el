@@ -529,7 +529,38 @@ Examples:
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
     (compile "make clean && make")))
 
+;;; Commands to insert project file relative path to current buffer
 
+(defun pjx/insert-path ()
+  "Find a project file and insert its relative path to current buffer at point."
+  (interactive)
+  (helm
+   :prompt "Project Files: "
+   :sources  `((
+                (name       . "File: ")
+                (candidates . ,(mapcar (lambda (cell)
+                                         (file-relative-name (cdr cell) default-directory))
+                                       (pjx--find-project-files (car (pjx--get-project-of-buffer))
+                                                                pjx-ignore-prefix-list
+                                                                pjx-ignore-suffix-list
+                                                                )))
+                (action     .  (lambda (p) (save-excursion (insert))))
+                ))))
+
+
+(defun pjx/insert-path-abs ()
+  "Find a project file and insert its absolute path at point."
+  (interactive)
+  (helm
+   :prompt "Project Files: "
+   :sources  `((
+                (name       . "File: ")
+                (candidates . ,(pjx--find-project-files (car (pjx--get-project-of-buffer))
+                                                                pjx-ignore-prefix-list
+                                                                pjx-ignore-suffix-list
+                                                                ))
+                (action     .  (lambda (p) (save-excursion (insert))))
+                ))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
