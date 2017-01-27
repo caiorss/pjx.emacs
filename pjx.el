@@ -312,25 +312,12 @@
                ;; Test if buffer is in project.
                (pjx--buffer-in-project-p (frame-parameter nil 'frame-project) buf)))))
 
+
 (defun pjx/open-frame ()
   "Open project in a new frame."
   (interactive)
   (pjx--project-open-callback
-   (lambda (path)
-     (let ((proj (file-name-nondirectory path)))
-       (dired-other-frame path)
-       (dired-omit-mode)
-       (dired-hide-details-mode)
-       (set-frame-name (concat "Proj: "  proj))
-
-
-        ;;; Set current project as frame project
-       (set-frame-parameter nil 'frame-project proj)
-
-       ;; C-x left or C-x right switches only between
-       ;; buffer files.
-       (pjx/frame-proj-files)
-       ))))
+   (lambda (path) (pjx--open-frame (file-name-nondirectory path)))))
 
 ;;; ****** Commands to close a project ********************** ;;
 
