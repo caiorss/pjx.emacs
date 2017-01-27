@@ -259,6 +259,23 @@
   (command-apropos "pjx/"))
 
 
+(defun pjx/new-project ()
+  (interactive)
+  (let* ((default-directory pjx-root-directory)
+         (project-name      (read-string "Project name: ")))
+    (unless (file-exists-p project-name)
+      (make-directory project-name))
+    (dired project-name)))
+
+(defun pjx/new-project-frame ()
+  (interactive)
+  (let* ((default-directory pjx-root-directory)
+         (project-name      (read-string "Project name: ")))
+    (unless (file-exists-p project-name)
+      (make-directory project-name))
+    (pjx--open-frame project-name)))
+
+
 ;;; =====> Commands to Open Project
 
 (defun pjx/root-dired ()
