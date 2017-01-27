@@ -234,6 +234,21 @@
                             ignore-suffix-list))
 
 
+(defun pjx--open-frame (proj)
+  "Open project in a new frame and make it exclusive to the project root directory."
+  (let* ((path (pjx--project-path proj)))
+
+    (dired-other-frame path)
+    (dired-omit-mode)
+    (dired-hide-details-mode)
+    (set-frame-name (concat "Proj: "  proj))
+       ;;; Set current project as frame project
+    (set-frame-parameter nil 'frame-project proj)
+    ;; C-x left or C-x right switches only between
+    ;; buffer files.
+    (pjx/frame-proj-files)
+    ))
+
 ;;; ====================  User Commands ======================== ;;;
 
 ;;; =====> Help Commands
