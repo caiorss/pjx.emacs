@@ -234,6 +234,21 @@
                             ignore-suffix-list))
 
 
+(defun pjx--open-frame (proj)
+  "Open project in a new frame and make it exclusive to the project root directory."
+  (let* ((path (pjx--project-path proj)))
+
+    (dired-other-frame path)
+    (dired-omit-mode)
+    (dired-hide-details-mode)
+    (set-frame-name (concat "Proj: "  proj))
+       ;;; Set current project as frame project
+    (set-frame-parameter nil 'frame-project proj)
+    ;; C-x left or C-x right switches only between
+    ;; buffer files.
+    (pjx/frame-proj-files)
+    ))
+
 ;;; ====================  User Commands ======================== ;;;
 
 ;;; =====> Help Commands
@@ -242,6 +257,23 @@
   "Show pjx commands help."
   (interactive)
   (command-apropos "pjx/"))
+
+
+(defun pjx/new-project ()
+  (interactive)
+  (let* ((default-directory pjx-root-directory)
+         (project-name      (read-string "Project name: ")))
+    (unless (file-exists-p project-name)
+      (make-directory project-name))
+    (dired project-name)))
+
+(defun pjx/new-project-frame ()
+  (interactive)
+  (let* ((default-directory pjx-root-directory)
+         (project-name      (read-string "Project name: ")))
+    (unless (file-exists-p project-name)
+      (make-directory project-name))
+    (pjx--open-frame project-name)))
 
 
 ;;; =====> Commands to Open Project
@@ -280,25 +312,12 @@
                ;; Test if buffer is in project.
                (pjx--buffer-in-project-p (frame-parameter nil 'frame-project) buf)))))
 
+
 (defun pjx/open-frame ()
   "Open project in a new frame."
   (interactive)
   (pjx--project-open-callback
-   (lambda (path)
-     (let ((proj (file-name-nondirectory path)))
-       (dired-other-frame path)
-       (dired-omit-mode)
-       (dired-hide-details-mode)
-       (set-frame-name (concat "Proj: "  proj))
-
-
-        ;;; Set current project as frame project
-       (set-frame-parameter nil 'frame-project proj)
-
-       ;; C-x left or C-x right switches only between
-       ;; buffer files.
-       (pjx/frame-proj-files)
-       ))))
+   (lambda (path) (pjx--open-frame (file-name-nondirectory path)))))
 
 ;;; ****** Commands to close a project ********************** ;;
 
@@ -510,8 +529,54 @@ Examples:
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
     (compile "make clean && make")))
 
+;;; Commands to insert project file relative path to current buffer
+
+(defun pjx/insert-path ()
+  "Find a project file and insert its relative path to current buffer at point."
+  (interactive)
+  (helm
+   :prompt "Project Files: "
+   :sources  `((
+                (name       . "File: ")
+                (candidates . ,(mapcar (lambda (cell)
+                                         (file-relative-name (cdr cell) default-directory))
+                                       (pjx--find-project-files (car (pjx--get-project-of-buffer))
+                                                                pjx-ignore-prefix-list
+                                                                pjx-ignore-suffix-list
+                                                                )))
+                (action     .  (lambda (p) (save-excursion (insert p))))
+                ))))
 
 
+(defun pjx/insert-path-abs ()
+  "Find a project file and insert its absolute path at point."
+  (interactive)
+  (helm
+   :prompt "Project Files: "
+   :sources  `((
+                (name       . "File: ")
+                (candidates . ,(pjx--find-project-files (car (pjx--get-project-of-buffer))
+                                                                pjx-ignore-prefix-list
+                                                                pjx-ignore-suffix-list
+                                                                ))
+                (action     .  (lambda (p) (save-excursion (insert p))))
+                ))))
+
+
+
+;;; Commands to run shell command at project root directory
+
+(defun pjx/shell ()
+  "Run a synchronous shell command at project root directory."
+  (interactive)
+  (let ((default-directory (cdr (pjx--get-project-of-buffer))))
+       (call-interactively #'shell-command)))
+
+(defun pjx/shell-async ()
+  "Run an asynchronous shell command at project root directory."
+  (interactive)
+  (let ((default-directory (cdr (pjx--get-project-of-buffer))))
+       (call-interactively #'async-shell-command)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
