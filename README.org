@@ -1,4 +1,5 @@
-* Emacs-projtools 
+* Emacs-project Manager - pjx 
+** Overview 
 
 IDEA: Create an Emacs package to handle software projects. 
 
@@ -13,21 +14,36 @@ Wishlist / Requirements:
 
 Features: 
 
- - switch between project buffers
+ - [X] switch between project buffers
 
- - switch between project dired buffers
+ - [ ] switch between project dired buffers
 
- - switch between project buffers associated to files
+ - [ ] switch between project buffers associated to files
 
- - find files in project sub-directories
+ - [X] find files in project sub-directories
 
- - find files in project sub-directories matching a regex
+ - [X] find files in project sub-directories matching a regex
 
- - close all project files
+ - [X] find files in project sub-directories with a given extension
 
- - open a project in a new frame dedicated to the project. The
+ - [X] close all project files
+
+ - [X] open a project in a new frame dedicated to the project. The
    commands C-x right (M-x next-buffer) and C-x left (M-x
    previous-buffer) switches only between project buffer files.
 
- - Run compilation commands and make specific commands at project root
+ - [X] Run compilation commands and make specific commands at project root
    directory.
+
+Todolist: 
+
+ - [ ] Add package header 
+
+ - [ ] Add documentation 
+
+ - [ ] Add examples 
+
+ - [ ] Add gifs
+
+** How it works ? 
+** Commands 
