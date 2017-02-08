@@ -559,7 +559,7 @@ Examples:
                                                                 pjx-ignore-prefix-list
                                                                 pjx-ignore-suffix-list
                                                                 ))
-                (action     .  (lambda (p) (save-excursion (insert))))
+                (action     .  (lambda (p) (save-excursion (insert p))))
                 ))))
 
 
