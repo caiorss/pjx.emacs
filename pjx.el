@@ -563,6 +563,21 @@ Examples:
                 ))))
 
 
+
+;;; Commands to run shell command at project root directory
+
+(defun pjx/shell ()
+  "Run a synchronous shell command at project root directory."
+  (interactive)
+  (let ((default-directory (cdr (pjx--get-project-of-buffer))))
+       (call-interactively #'shell-command)))
+
+(defun pjx/shell-async ()
+  "Run an asynchronous shell command at project root directory."
+  (interactive)
+  (let ((default-directory (cdr (pjx--get-project-of-buffer))))
+       (call-interactively #'async-shell-command)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (provide 'pjx)
