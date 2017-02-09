@@ -103,7 +103,15 @@
   (mapcar (lambda (p) (cons (file-name-nondirectory p) p))
           (cdr (cdr (directory-files pjx-root-directory t)))))
 
-
+;;
+;;
+;; ELISP> (pjx--project-path "zhserver.haskell")
+;; "~/Documents/projects/zhserver.haskell"
+;;
+;; ELISP> (pjx--project-path "pjx.emacs")
+;; "~/Documents/projects/pjx.emacs"
+;; ELISP>
+;;
 (defun pjx--project-path (project-name)
   "Returns a path from a given project."
   (concat (file-name-as-directory pjx-root-directory) project-name))
@@ -172,14 +180,21 @@
                 (candidates . ,(pjx--get-opened-projects))
                 (action     .  callback)
                 ))))
-
-
+;; Example:
+;;
+;; ELISP> (pjx--get-project-of-buffer)
+;; ("pjx.emacs" . "~/Documents/projects/pjx.emacs")
+;;
 (defun pjx--get-project-of-buffer ()
-  "Get the project the current buffer is associated with."
+  "Get the project that the current buffer is associated with."
   (car (remove-if-not (lambda (proj) (pjx--buffer-in-project-p (car proj) (current-buffer)))
                       (pjx--get-opened-projects))))
 
 
+;;
+;; ELISP> (pjx--get-project-buffers "pjx.emacs")
+;; (#<buffer *ielm*> #<buffer pjx.el> #<buffer  *Minibuf-1*> #<buffer pjx-backup.el> ....)
+;;
 (defun pjx--get-project-buffers (project-name)
   "Returns all buffers that belongs to a project."
   (remove-if-not (lambda (buf) (pjx--buffer-in-project-p project-name buf))
