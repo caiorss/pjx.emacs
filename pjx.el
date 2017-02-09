@@ -583,6 +583,15 @@ Examples:
   (insert (read-file-name "path >" "~")))
 
 
+(defun pjx/org-image-insert ()
+  "Insert path to image in documentation  REAME.org file."
+  (interactive)
+  (let* ((proj-dir (cdr (pjx--get-project-of-buffer)))
+         (file     (file-relative-name  (read-file-name "path >" "./images"  proj-dir)
+                                        proj-dir
+                                        )))
+    (insert (org-make-link-string  (concat "file:" file )
+                                   (concat "file:" file )))))
 
 ;;; Commands to run shell command at project root directory
 
