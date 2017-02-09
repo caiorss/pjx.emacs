@@ -577,6 +577,11 @@ Examples:
                 (action     .  (lambda (p) (save-excursion (insert p))))
                 ))))
 
+(defun pjx/insert-path-sys ()
+  "Insert path at point to system file or directory."
+  (interactive)
+  (insert (read-file-name "path >" "~")))
+
 
 
 ;;; Commands to run shell command at project root directory
