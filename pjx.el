@@ -621,6 +621,15 @@ Examples:
   (with-selected-frame (make-frame)
     (pjx/scratch)))
 
+(defun pjx/copy-file-name ()
+  "Copy buffer absolute file name to clipboard."
+  (interactive)
+  (let ((fname (buffer-file-name)))
+    (with-temp-buffer
+      (insert fname)
+      (clipboard-kill-region (point-min) (point-max)))
+    (message (format "Buffer file name: %s copied to clipboard."
+                     fname))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
