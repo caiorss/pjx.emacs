@@ -609,6 +609,13 @@ Examples:
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
        (call-interactively #'async-shell-command)))
 
+
+(defun pjx/scratch ()
+  "Open scratch directory"
+  (interactive)
+  (pjx/new-project "scratch"))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (provide 'pjx)
