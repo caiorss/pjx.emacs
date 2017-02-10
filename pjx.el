@@ -274,10 +274,12 @@
   (command-apropos "pjx/"))
 
 
-(defun pjx/new-project ()
+(defun pjx/new-project (&optional project-namep)
   (interactive)
   (let* ((default-directory pjx-root-directory)
-         (project-name      (read-string "Project name: ")))
+         (project-name      (if project-namep
+                                project-namep
+                                (read-string "Project name: "))))
     (unless (file-exists-p project-name)
       (make-directory project-name))
     (dired project-name)))
