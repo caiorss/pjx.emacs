@@ -615,6 +615,12 @@ Examples:
   (interactive)
   (pjx/new-project "scratch"))
 
+(defun pjx/scratch-frame ()
+  "Open scratch project in a new frame."
+  (interactive)
+  (with-selected-frame (make-frame)
+    (pjx/scratch)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
