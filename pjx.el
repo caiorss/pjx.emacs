@@ -631,6 +631,19 @@ Examples:
     (message (format "Buffer file name: %s copied to clipboard."
                      fname))))
 
+
+(defun pjx/copy-dir-path ()
+  "Copy absolute path to buffer current directory."
+  (interactive)
+  (let ((fname default-directory))
+    (with-temp-buffer
+      (insert fname)
+      (clipboard-kill-region (point-min) (point-max)))
+    (message (format "Buffer file name: %s copied to clipboard."
+                     fname))))
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (provide 'pjx)
