@@ -621,7 +621,7 @@ Examples:
   (with-selected-frame (make-frame)
     (pjx/scratch)))
 
-(defun pjx/copy-file-name ()
+(defun pjx/copy-file-path ()
   "Copy buffer absolute file name to clipboard."
   (interactive)
   (let ((fname (buffer-file-name)))
