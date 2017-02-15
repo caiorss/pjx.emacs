@@ -633,6 +633,16 @@ Examples:
     (message (format "Buffer file name: %s copied to clipboard."
                      fname))))
 
+(defun pjx/copy-project-path ()
+  "Copy current project root directory to clipboard."
+  (interactive)
+  (let ((proj-path (cdr (pjx--get-project-of-buffer))))
+   (with-temp-buffer
+     (insert proj-path)
+     (clipboard-kill-region (point-min) (point-max)))
+   (message (format "Copied to clipboard: %s" proj-path))))
+
+
 
 (defun pjx/copy-dir-path ()
   "Copy absolute path to buffer current directory."
