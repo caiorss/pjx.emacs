@@ -493,6 +493,49 @@ Examples:
                 (action     .  find-file)
                 ))))
 
+(defun pjx/find-dired ()
+  "Run M-x find-dired at root project directory."
+  (interactive)
+  (find-dired (cdr (pjx--get-project-of-buffer))
+              (mapconcat #'identity
+                         '(
+                           ;; Directories to exclude
+                           "-not -path '*/.git*'"         ;; Exclude .git Directory
+                           "-not -path '*/bin*'"
+                           "-not -path '*/lib*'"
+                           "-not -path '*/target*'"
+
+                           ;; Temporary files
+                           "-and -not -name '.#*'"        ;; Exclude temporary files starting with #
+                           "-and -not -name '#*'"
+                           "-and -not -name '*#'"
+                           "-and -not -name '*~' "        ;; Exclude ending with ~ (tilde)
+
+                           ;; Java Binary files
+                           "-and -not -name '*.jar'"
+                           "-and -not -name '*.war'"
+                           "-and -not -name '*.class'"
+
+                           ;; .NET binary files
+                           "-and -not -name '*.exe'"
+                           "-and -not -name '*.dll'"
+                           "-and -not -name '*.mdb'"
+
+                           ;; Haskell binary files
+                           "-and -not -name '*.hi'"
+
+                           ;; C/C++ Binary files
+                           "-and -not -name '*.o'"
+                           "-and -not -name '*.bin'"
+
+                           ;; Archives
+                           "-and -not -name '*.tar'"
+                           "-and -not -name '*.tgz'"
+                           "-and -not -name '*.zip'"
+                           "-and -not -name '*.gz'"
+                           )
+                         " ")))
+
 
 (defun pjx/open-files-regex ()
   "Open all project files matching regex recursively."
