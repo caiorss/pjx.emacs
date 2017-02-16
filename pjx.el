@@ -233,16 +233,29 @@
 (defun pjx--find-files-by-regex (proj-name regex ignore-prefix-list ignore-suffix-list )
   (let ((path (pjx--project-path proj-name)))
     (remove-if (lambda (cell)
-               (let ((s (car cell)))
-                (or  (string-match-p "\\.git" s)
-                    (some  (lambda (ext) (string-suffix-p ext s))
-                           ignore-suffix-list)
-                    (some  (lambda (pre) (string-prefix-p pre s))
-                           ignore-prefix-list))))
+                 (let ((s (car cell)))
+                   (or   ;; Exclude common directories and binary files
+                        (string-match-p "\\.git"  s)         ;; Exclude any file in .git/ directory
+                        (string-match-p "\\.so.*" s)         ;; Exclude libm.so.2, libm.so  ...
+                        (string-match-p "\\.dll" s)
+                        (string-match-p "\\.exe" s)
+                        (string-match-p "\\.class" s)
+                        (string-match-p "\\.war" s)
+                        (string-match-p "\\.jar" s)
+                        (string-match-p "\\.bin" s)
+                        (string-match-p "\\.sqlite" s)
+                        (string-match-p "\\.hi" s)
+                        (string-match-p "\\.o" s)
+
+                        (some  (lambda (ext) (string-suffix-p ext s))
+                               ignore-suffix-list)
+                        (some  (lambda (pre) (string-prefix-p pre s))
+                             ignore-prefix-list))))
 
                (mapcar (lambda (file) (cons (file-relative-name file path)
                                             file))
                        (directory-files-recursively path regex)))))
+
 
 (defun pjx--find-project-files (proj ignore-prefix-list ignore-suffix-list)
   (pjx--find-files-by-regex proj
