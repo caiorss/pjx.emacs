@@ -484,13 +484,7 @@
                 (name       . "File: ")
                 (candidates . ,(pjx--find-files-subdirs
                                  (cdr (pjx--get-project-of-buffer))
-
-                                 '("*.git*"  "#*.*#"  "*.class" "*.png" "*.gif" "*.jpg" "*.jpeg"
-
-                                  "images/*" "*project/target/*" "*/.stack-work/*" "*.so.*" "*.so"
-                                  "*.o" "*.dll" "*.exe" "*/dist/*" "*.bin" "*.tar" "*.jar" "*.tar.gz" "*.tgz" "*.tar.xz"
-                                  "*.hi"
-                                  )))
+                                 pjx-files-exclude-list))
                 (action     .  find-file)
                 ))))
 
