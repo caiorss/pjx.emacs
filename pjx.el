@@ -230,6 +230,20 @@
         (pjx--get-project-buffers proj-name)))
 
 
+(defun pjx--find-files-subdirs (directory exclude)
+  "Find files using $ find command in subdirectories."
+  (mapcar (lambda (file) (cons (file-relative-name file directory) file))
+          (split-string (shell-command-to-string
+                         (concat  (format "find '%s' -type f " (expand-file-name directory))
+                                  (mapconcat  (lambda (p) (format "! -path '%s'" p))
+                                              exclude
+                                              " "
+                                              )))
+                        "\n"
+                        t
+                        )))
+
+
 (defun pjx--find-files-by-regex (proj-name regex ignore-prefix-list ignore-suffix-list )
   (let ((path (pjx--project-path proj-name)))
     (remove-if (lambda (cell)
