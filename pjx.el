@@ -319,6 +319,7 @@
 
 
 (defun pjx/new-project (&optional project-namep)
+  "Create a new project directory at `pjx-root-directory` and open it."
   (interactive)
   (let* ((default-directory pjx-root-directory)
          (project-name      (if project-namep
@@ -329,6 +330,7 @@
     (dired project-name)))
 
 (defun pjx/new-project-frame ()
+  "Create a new project directory at `pjx-root-directory` and open it in a new frame."
   (interactive)
   (let* ((default-directory pjx-root-directory)
          (project-name      (read-string "Project name: ")))
