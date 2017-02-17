@@ -475,10 +475,15 @@
    :prompt "Project Files: "
    :sources  `((
                 (name       . "File: ")
-                (candidates . ,(pjx--find-project-files (car (pjx--get-project-of-buffer))
-                                                        pjx-ignore-prefix-list
-                                                        pjx-ignore-suffix-list
-                                                        ))
+                (candidates . ,(pjx--find-files-subdirs
+                                 (cdr (pjx--get-project-of-buffer))
+
+                                 '("*.git*"  "#*.*#"  "*.class" "*.png" "*.gif" "*.jpg" "*.jpeg"
+
+                                  "images/*" "*project/target/*" "*/.stack-work/*" "*.so.*" "*.so"
+                                  "*.o" "*.dll" "*.exe" "*/dist/*" "*.bin" "*.tar" "*.jar" "*.tar.gz" "*.tgz" "*.tar.xz"
+                                  "*.hi"
+                                  )))
                 (action     .  find-file)
                 ))))
 
