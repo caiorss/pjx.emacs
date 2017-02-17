@@ -251,6 +251,14 @@
                         )))
 
 
+(defun pjx--find-files-subdirs-ext (directory extensions exclude)
+  "Find all files in current directory and subdirectories with a given set of extensions."
+  (remove-if-not (lambda (cell)
+                   (some (lambda (ext) (string-suffix-p ext (cdr cell)))
+                                      extensions))
+                 (pjx--find-files-subdirs directory exclude)))
+
+
 (defun pjx--find-files-by-regex (proj-name regex ignore-prefix-list ignore-suffix-list )
   (let ((path (pjx--project-path proj-name)))
     (remove-if (lambda (cell)
