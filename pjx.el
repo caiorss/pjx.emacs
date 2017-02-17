@@ -522,15 +522,10 @@ Examples:
    :sources  `((
                 (name       . "File: ")
 
-                (candidates . ,(pjx--find-files-by-regex
-                                (car (pjx--get-project-of-buffer))
-                                (mapconcat 'identity
-                                           (mapcar (lambda (ext) (format "\\.%s$" ext))
-                                                   (split-string (read-string "Extension:  ")))
-                                           "\\\|")
-
-                                pjx-ignore-prefix-list
-                                pjx-ignore-suffix-list))
+                (candidates . ,(pjx--find-files-subdirs-ext (cdr (pjx--get-project-of-buffer))
+                                                            (split-string (read-string "Extensions: ") " " t)
+                                                            pjx-files-exclude-list
+                                                            ))
                 (action     .  find-file)
                 ))))
 
