@@ -531,6 +531,16 @@ Examples:
                 (action     .  find-file)
                 ))))
 
+(defun pjx/find-files-open ()
+  "Open all files with given extensions in the project and open it.
+Use M-x pjx/switch-file to switch between the files opened."
+  (interactive)
+  (mapc (lambda (cell) (find-file-noselect (cdr cell)))
+        (pjx--find-files-subdirs-ext  (cdr (pjx--get-project-of-buffer))
+                                      (split-string (read-string "Extensions: ") " " t)
+                                      pjx-files-exclude-list)))
+
+
 (defun pjx/find-dired ()
   "Run M-x find-dired at root project directory."
   (interactive)
