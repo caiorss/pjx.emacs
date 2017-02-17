@@ -531,6 +531,20 @@ Examples:
                 (action     .  find-file)
                 ))))
 
+
+(defun pjx/find-file-here ()
+  "Find files in subdirectories of current directory."
+  (interactive)  
+  (helm
+   :prompt "Project Files: "
+   :sources  `((
+                (name       . "File: ")
+                (candidates . ,(pjx--find-files-subdirs default-directory
+                                                        pjx-files-exclude-list))
+                (action     .  find-file)
+                ))))
+
+
 (defun pjx/find-files-open ()
   "Open all files with given extensions in the project and open it.
 Use M-x pjx/switch-file to switch between the files opened."
