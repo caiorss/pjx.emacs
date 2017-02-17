@@ -91,6 +91,13 @@
         "sandbox/elpa"
         ))
 
+(setq pjx-files-exclude-list
+      '("*.git*"  "#*.*#"  "*.class" "*.png" "*.gif" "*.jpg" "*.jpeg"
+        "images/*" "*project/target/*" "*/.stack-work/*" "*.so.*" "*.so"
+        "*.o" "*.dll" "*.exe" "*/dist/*" "*.bin" "*.tar" "*.jar" "*.tar.gz" "*.tgz" "*.tar.xz"
+        "*.hi"
+        ))
+
 
 ;;; ============== Internal functions and helpers ========== ;;
 
@@ -230,6 +237,28 @@
         (pjx--get-project-buffers proj-name)))
 
 
+(defun pjx--find-files-subdirs (directory exclude)
+  "Find files using $ find command in subdirectories."
+  (mapcar (lambda (file) (cons (file-relative-name file directory) file))
+          (split-string (shell-command-to-string
+                         (concat  (format "find '%s' -type f " (expand-file-name directory))
+                                  (mapconcat  (lambda (p) (format "! -path '%s'" p))
+                                              exclude
+                                              " "
+                                              )))
+                        "\n"
+                        t
+                        )))
+
+
+(defun pjx--find-files-subdirs-ext (directory extensions exclude)
+  "Find all files in current directory and subdirectories with a given set of extensions."
+  (remove-if-not (lambda (cell)
+                   (some (lambda (ext) (string-suffix-p ext (cdr cell)))
+                                      extensions))
+                 (pjx--find-files-subdirs directory exclude)))
+
+
 (defun pjx--find-files-by-regex (proj-name regex ignore-prefix-list ignore-suffix-list )
   (let ((path (pjx--project-path proj-name)))
     (remove-if (lambda (cell)
@@ -290,6 +319,7 @@
 
 
 (defun pjx/new-project (&optional project-namep)
+  "Create a new project directory at `pjx-root-directory` and open it."
   (interactive)
   (let* ((default-directory pjx-root-directory)
          (project-name      (if project-namep
@@ -300,6 +330,7 @@
     (dired project-name)))
 
 (defun pjx/new-project-frame ()
+  "Create a new project directory at `pjx-root-directory` and open it in a new frame."
   (interactive)
   (let* ((default-directory pjx-root-directory)
          (project-name      (read-string "Project name: ")))
@@ -461,10 +492,9 @@
    :prompt "Project Files: "
    :sources  `((
                 (name       . "File: ")
-                (candidates . ,(pjx--find-project-files (car (pjx--get-project-of-buffer))
-                                                        pjx-ignore-prefix-list
-                                                        pjx-ignore-suffix-list
-                                                        ))
+                (candidates . ,(pjx--find-files-subdirs
+                                 (cdr (pjx--get-project-of-buffer))
+                                 pjx-files-exclude-list))
                 (action     .  find-file)
                 ))))
 
@@ -494,15 +524,10 @@ Examples:
    :sources  `((
                 (name       . "File: ")
 
-                (candidates . ,(pjx--find-files-by-regex
-                                (car (pjx--get-project-of-buffer))
-                                (mapconcat 'identity
-                                           (mapcar (lambda (ext) (format "\\.%s$" ext))
-                                                   (split-string (read-string "Extension:  ")))
-                                           "\\\|")
-
-                                pjx-ignore-prefix-list
-                                pjx-ignore-suffix-list))
+                (candidates . ,(pjx--find-files-subdirs-ext (cdr (pjx--get-project-of-buffer))
+                                                            (split-string (read-string "Extensions: ") " " t)
+                                                            pjx-files-exclude-list
+                                                            ))
                 (action     .  find-file)
                 ))))
 
