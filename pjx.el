@@ -91,6 +91,13 @@
         "sandbox/elpa"
         ))
 
+(setq pjx-files-exclude-list
+      '("*.git*"  "#*.*#"  "*.class" "*.png" "*.gif" "*.jpg" "*.jpeg"
+        "images/*" "*project/target/*" "*/.stack-work/*" "*.so.*" "*.so"
+        "*.o" "*.dll" "*.exe" "*/dist/*" "*.bin" "*.tar" "*.jar" "*.tar.gz" "*.tgz" "*.tar.xz"
+        "*.hi"
+        ))
+
 
 ;;; ============== Internal functions and helpers ========== ;;
 
