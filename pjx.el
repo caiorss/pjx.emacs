@@ -544,6 +544,18 @@ Examples:
                 (action     .  find-file)
                 ))))
 
+(defun pjx/find-file-dir ()
+  "Find files at current directory."
+  (interactive)
+  (let ((pwd default-directory))
+   (helm
+   :prompt "Open file: "
+   :sources  `((
+                (name       . "File:")
+                (candidates . ,(directory-files pwd))
+                (action     .  find-file)
+                )))))
+
 
 (defun pjx/find-files-open ()
   "Open all files with given extensions in the project and open it.
