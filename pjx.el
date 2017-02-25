@@ -498,6 +498,22 @@
                 (action     .  find-file)
                 ))))
 
+(defun pjx/find-file-frame ()
+  "Find file in project subdirectories and opens it in a new frame."
+  (interactive)
+  (helm
+   :prompt "Project Files: "
+   :sources  `((
+                (name       . "File: ")
+                (candidates . ,(pjx--find-files-subdirs
+                                 (cdr (pjx--get-project-of-buffer))
+                                 pjx-files-exclude-list))
+                
+                (action     .  (lambda (file) (with-selected-frame (make-frame)
+                                                (find-file file))))
+                
+                ))))
+
 
 (defun pjx/find-file-regex ()
   "Find all project files recursively matching a regex."
