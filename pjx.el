@@ -465,6 +465,24 @@
                 ))))
 
 
+(defun pjx/switch-file-frame ()
+  "Switch between buffers associated to files belonging to current project."
+  (interactive)
+  (helm
+   :prompt "Project File: "
+   :sources  `((
+                (name       . "Proj:")
+		
+                (candidates . ,(pjx--filter-project-buffers (car (pjx--get-project-of-buffer))
+                                                            #'buffer-file-name
+                                                            (lambda (buf)
+                                                              (file-relative-name (buffer-file-name buf)
+                                                                                  (cdr (pjx--get-project-of-buffer))))))
+
+                (action     . (lambda (buf) (with-selected-frame (make-frame)
+                                               (switch-to-buffer buf))))
+                ))))
+
 (defun pjx/switch-dir ()
   "Switch between dired buffers within the current project."
   (interactive)
