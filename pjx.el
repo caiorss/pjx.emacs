@@ -327,6 +327,10 @@ Default value '~/Documents/projects'."
   (interactive)
   (command-apropos "pjx/"))
 
+(defun pjx/customize ()
+  "Open customization panel for pjx tool."
+  (interactive)
+  (customize-group "pjx"))
 
 (defun pjx/new-project (&optional project-namep)
   "Create a new project directory at `pjx-root-directory` and open it."
