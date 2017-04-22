@@ -426,7 +426,7 @@ Default value '~/Documents/projects'."
   (interactive)
   (pjx--project-select-callback #'dired))
 
-(defun pjx/project-switch-dir-window ()
+(defun pjx/project-switch-window ()
   "Switch to project directory in other window."
   (interactive)
   (pjx--project-select-callback #'dired-other-window))
