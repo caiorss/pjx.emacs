@@ -156,6 +156,8 @@ $ tree -L 2 ~/Documents/projects
 |                           |                                                                                                     |
 | pjx/project-switch-frame  | Switch between opened projects in a new frame.                                                      |
 |                           |                                                                                                     |
+| pjx/github                | Open https github Url. It supposes that origin remote Url is the Github https Url.                  |
+|                           |                                                                                                     |
 | *Directory Commands*      |                                                                                                     |
 |                           |                                                                                                     |
 | pjx/root-dired            | Go to ~pjx-root-directory~ directory where all projects are stored.                                 |
