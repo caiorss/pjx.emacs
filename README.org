@@ -24,6 +24,10 @@ Features:
 
  - [ ] switch between project buffers associated to files
 
+ - [ ] Command to close all buffers not related to current project
+
+ - [ ] Python backend for metadata
+
  - [X] find files in project sub-directories
 
  - [X] find files in project sub-directories matching a regex
@@ -41,9 +45,13 @@ Features:
 
 Todolist: 
 
- - [ ] Add package header 
+ - [X] Add package header 
 
- - [ ] Add documentation 
+ - [ ] Add documentation
+
+ - [X] Add summary
+
+ - [ ] Add development documentation and notes.
 
  - [ ] Add examples 
 
@@ -51,3 +59,74 @@ Todolist:
 
 ** How it works ? 
 ** Commands 
+
+
+| M-x [command]             | Description                                                                                         |
+|---------------------------+-----------------------------------------------------------------------------------------------------|
+| *Misc Commands*           |                                                                                                     |
+|                           |                                                                                                     |
+| pjx/help                  | Show pjx commands help                                                                              |
+|                           |                                                                                                     |
+| pjx/customize             | Open customization pjx panel. Customize pjx settings.                                               |
+|                           |                                                                                                     |
+| *Project Commands*        |                                                                                                     |
+|                           |                                                                                                     |
+| pjx/open                  | Show a helm menu where the user can select the project to open.                                     |
+|                           |                                                                                                     |
+| pjx/open-frame            | Like pjx/open-frame, but open the project in a new frame. This frame is exclusive to project.       |
+|                           |                                                                                                     |
+| pjx/close                 | Kill all buffers related to current project                                                         |
+|                           |                                                                                                     |
+| pjx/close-frame           | Kill all buffers related to current project and closes the current frame.                           |
+|                           |                                                                                                     |
+| pjx/project-switch        | Switch between opened projects.                                                                     |
+|                           |                                                                                                     |
+| pjx/project-switch-window | Switch between opened projects in a new window.                                                     |
+|                           |                                                                                                     |
+| pjx/project-switch-frame  | Switch between opened projects in a new frame.                                                      |
+|                           |                                                                                                     |
+| *Directory Commands*      |                                                                                                     |
+|                           |                                                                                                     |
+| pjx/root-dired            | Go to ~pjx-root-directory~ directory where all projects are stored.                                 |
+| pjx/root-dired-frame      | Go to ~pjx-root-directory~ directory where all projects are stored in a new frame.,                 |
+|                           |                                                                                                     |
+| pjx/top                   | Go to project root directory.                                                                       |
+|                           |                                                                                                     |
+|                           |                                                                                                     |
+|                           |                                                                                                     |
+|                           |                                                                                                     |
+| *File Commands*           |                                                                                                     |
+|                           |                                                                                                     |
+| pjx/switch                | Switch between project buffers.                                                                     |
+|                           |                                                                                                     |
+| pjx/switch-file           | Switch between project buffers associated with files.                                               |
+|                           |                                                                                                     |
+| pjx/switch-file-frame     | Switch to project file in a new frame.                                                              |
+|                           |                                                                                                     |
+| pjx/find-file             | Provides a helm-menu where the user can select file to open at all directories and sub directories. |
+|                           |                                                                                                     |
+| pjx/find-file-frame       | Like pjx/find-file, but open file in a new frame.                                                   |
+|                           |                                                                                                     |
+| pjx/find-file-ext         | Show all files ending with extensions provided by the user where he can select the file to open.    |
+|                           |                                                                                                     |
+| pjx/find-files-open       | Open all project files with given extensions. Use pjx/switch-file to switch between those files.    |
+|                           |                                                                                                     |
+| pjx/find-files-regex      | Open all files with names matching a given regex.                                                   |
+|                           |                                                                                                     |
+| pjx/find-dired            | Run M-x find-dired at project root directory showing all files and subdirectories.                  |
+|                           |                                                                                                     |
+| *Build Commands*          |                                                                                                     |
+|                           |                                                                                                     |
+| pjx/compile               | Run compilation command at current project directory                                                |
+| pjx/make                  | Run $ make at project root directory and execute Makefile main rule.                                |
+| pjx/make-cmd              | Run $ make at project root directory asking the user the make command to run.                       |
+| pjx/make-clean            | Run '$ make clean' at project root directory and execute Makefile clean rule.                       |
+| pjx/make-again            | Run '$ make clean && make' at project root directory and execute Makefile main rule.                |
+|                           |                                                                                                     |
+| *Copy Commands*           |                                                                                                     |
+|                           |                                                                                                     |
+| pjx/copy-file-path        | Copy buffer absolute file name to clipboard.                                                        |
+| pjx/copy-project-path     | Copy current project root directory to clipboard.                                                   |
+| pjx/copy-dir-path         | Copy absolute path to buffer current directory.                                                     |
+|                           |                                                                                                     |
+|                           |                                                                                                     |
