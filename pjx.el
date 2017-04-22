@@ -421,7 +421,7 @@ Default value '~/Documents/projects'."
 ;; **** Commands to switch between project directories ****** ;;
 
 
-(defun pjx/project-switch-dir ()
+(defun pjx/project-switch ()
   "Switch to project directory"
   (interactive)
   (pjx--project-select-callback #'dired))
