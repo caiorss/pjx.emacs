@@ -1,0 +1,8 @@
+/#pjx.el#
+*.html
+*.elc
+*.zip
+*.tgz
+*.dll
+*.exe
+*.pyc
