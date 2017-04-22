@@ -74,13 +74,20 @@
 
 ;;; Refactor pjx project
 
-;;; pjx Root directory
-;;;
-(setq pjx-root-directory "~/Documents/projects")
 ;; ******************** C U S T O M I Z A T I O N S *********************** ;;
 
-(setq pjx-current-project nil)
 
+(defgroup pjx nil
+  "Pjx - Project Management Tool Settings"
+  :group 'tools
+  )
+
+(defcustom pjx-root-directory "~/Documents/projects"
+  "Pjx directory where all projects are stored.
+Default value '~/Documents/projects'."
+  :type  'directory
+  :group 'pjx
+  )
 
 (setq pjx-ignore-suffix-list
       '( ".so" ".o" ".dll" ".exe" ".bin"
