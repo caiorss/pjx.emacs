@@ -1,3 +1,7 @@
+#+TITLE: Emacs Project Manager - Pjx
+#+DESCRIPTION: Project Manager For Emacs
+#+KEYWORDS: Eamcs project manager files development tool
+
 * Emacs-project Manager - pjx 
 ** Overview 
 
