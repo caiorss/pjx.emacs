@@ -71,6 +71,10 @@ Todolist:
 |                           |                                                                                                     |
 | *Project Commands*        |                                                                                                     |
 |                           |                                                                                                     |
+| pjx/new-project           | Ask the user the project name and open its directory.                                               |
+|                           |                                                                                                     |
+| pjx/new-project-frame     | Ask the user the project name and opens in a new frame.                                             |
+|                           |                                                                                                     |
 | pjx/open                  | Show a helm menu where the user can select the project to open.                                     |
 |                           |                                                                                                     |
 | pjx/open-frame            | Like pjx/open-frame, but open the project in a new frame. This frame is exclusive to project.       |
@@ -78,6 +82,8 @@ Todolist:
 | pjx/close                 | Kill all buffers related to current project                                                         |
 |                           |                                                                                                     |
 | pjx/close-frame           | Kill all buffers related to current project and closes the current frame.                           |
+|                           |                                                                                                     |
+| pjx/close-all             | Close all projects.                                                                                 |
 |                           |                                                                                                     |
 | pjx/project-switch        | Switch between opened projects.                                                                     |
 |                           |                                                                                                     |
