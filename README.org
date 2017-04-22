@@ -58,6 +58,71 @@ Todolist:
  - [ ] Add gifs
 
 ** How it works ? 
+
+This package provides commands to open, close, manipulate, find files, run
+compilation commands in projects. 
+
+Features: 
+
+ - Commands to find-files in project directory and in within its subdirectories.
+
+ - Quick navigation between project.
+
+ - Open projects in frames exclusive to the project. M-x left or M-x
+   right switches only between project buffers.
+
+ - Commands to open projects and close/kill project buffers.
+
+ - Commands to run compilation commands and Makefile commands.
+
+A project is just a directory in ~pjx-root-directory~ where is the
+path where all projects are stored.
+
+Example:
+
+#+BEGIN_SRC sh
+$ tree -L 2 ~/Documents/projects
+/home/archbox/Documents/projects
+├── boleto.fsharp
+│   ├── #boleto.fsx#
+│   └── boleto.fsx
+├── bookmarklet-maker.web
+│   ├── dist
+│   ├── index.html
+│   ├── LICENSE
+│   ├── Makefile
+│   ├── README.html
+│   ├── README.org
+│   ├── scratch.js
+│   └── scripts
+... ... ... ... 
+
+└── zhserver.haskell
+    ├── assets
+    ├── copylibs.sh
+    ├── database
+    ├── dist
+    ├── Documentation.org
+    ├── images
+    ├── lib
+    ├── LICENSE
+    ├── Makefile
+    ├── my-zhserver2.conf
+    ├── my-zhserver.conf
+    ├── README.org
+    ├── src
+    ├── stack.yaml
+    ├── test
+    ├── testdb
+    ├── test-scripts
+    ├── zhclient.bin
+    ├── zhclient.sh
+    ├── zhserver.bin
+    ├── zhserver.cabal
+    └── zhserver.sh
+
+#+END_SRC
+
 ** Commands 
 
 
