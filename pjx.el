@@ -418,6 +418,13 @@ Default value '~/Documents/projects'."
   (pjx/close)
   (delete-frame))
 
+(defun pjx/close-all ()
+  "Close all projects"
+  (interactive)
+  (mapc #'pjx--project-close
+        (mapcar #'car (pjx--get-opened-projects))))
+
+
 ;; **** Commands to switch between project directories ****** ;;
 
 
