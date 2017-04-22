@@ -871,6 +871,14 @@ Use M-x pjx/switch-file to switch between the files opened."
                      fname))))
 
 
+;;;;;;;;; Github ;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defun pjx/github ()
+  "Open project in Github. 
+It supposes that the remote origins is set to Github https url."
+  (interactive)
+  (browse-url (shell-command-to-string "git config --get remote.origin.url")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
