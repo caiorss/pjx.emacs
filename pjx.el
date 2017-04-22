@@ -62,6 +62,7 @@
 
 ;;; Code
 
+;; ********************  D E P E N D E N C I E S *********************** ;;
 
 (eval-when-compile (require 'cl))
 
@@ -76,6 +77,7 @@
 ;;; pjx Root directory
 ;;;
 (setq pjx-root-directory "~/Documents/projects")
+;; ******************** C U S T O M I Z A T I O N S *********************** ;;
 
 (setq pjx-current-project nil)
 
@@ -100,6 +102,7 @@
 
 
 ;;; ============== Internal functions and helpers ========== ;;
+;; ******************** I N T E R N A L  -  F U N C T I O N S  ********************** ;;
 
 (defun pjx--path-in-dir-p (root path)
   "Check if path is in root directory."
