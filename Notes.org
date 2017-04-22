@@ -1,0 +1,106 @@
+* Development Notes
+** How it works ?
+** Internal Functions
+*** pjx--project-list
+
+Returns all projects directories.
+
+The result is a cons-list. The first cell is the project name and
+second cell contains the project path.
+
+
+Example:
+
+#+BEGIN_SRC elisp
+ELISP> (pjx--project-list)
+
+(("FSharp-Demo.fsharp" . "/home/archbox/Documents/projects/FSharp-Demo.fsharp")
+ ("FSharpi.fsharp" . "/home/archbox/Documents/projects/FSharpi.fsharp")
+ ("FsxTools.fsharp" . "/home/archbox/Documents/projects/FsxTools.fsharp")
+ ("Wforms.fsharp" . "/home/archbox/Documents/projects/Wforms.fsharp")
+ ("boleto.fsharp" . "/home/archbox/Documents/projects/boleto.fsharp")
+ ("bookmarklet-maker.web" . "/home/archbox/Documents/projects/bookmarklet-maker.web")
+ ("caiorss.github.io" . "/home/archbox/Documents/projects/caiorss.github.io")
+ ("canvas.fsharp" . "/home/archbox/Documents/projects/canvas.fsharp")
+ ("clipboard.scala" . "/home/archbox/Documents/projects/clipboard.scala")
+ ("dataframe.fsharp" . "/home/archbox/Documents/projects/dataframe.fsharp")
+ ("datasets" . "/home/archbox/Documents/projects/datasets")
+ ("docker.emacs" . "/home/archbox/Documents/projects/docker.emacs")
+ ("emacs" . "/home/archbox/Documents/projects/emacs")
+ ("empanel.emacs" . "/home/archbox/Documents/projects/empanel.emacs")
+... ... 
+)
+#+END_SRC
+
+*** pjx--project-path
+
+Returns a path from a given project.
+
+Example:
+
+#+BEGIN_SRC elisp 
+ELISP> (pjx--project-path "FsxTools.fsharp")
+"~/Documents/projects/FsxTools.fsharp"
+ELISP> 
+
+ELISP> (pjx--project-path "emacs")
+"~/Documents/projects/emacs"
+ELISP> 
+#+END_SRC
+*** pjx--project-open-callback
+
+Show a helm menu where the user can select a project to open. It
+passes the selected project path to callback function.
+
+#+BEGIN_SRC elisp
+(pjx--project-open-callback callback)
+#+END_SRC
+
+Example: If the user run the command below and select the project
+'empanel.emacs' the project path will be passed to the function insert
+that will insert the project path at point.
+
+#+BEGIN_SRC elisp
+ELISP> (pjx--project-open-callback #'insert)
+nil
+ELISP> /home/archbox/Documents/projects/empanel.emacs
+#+END_SRC
+*** pjx--get-opened-projects
+
+Return a list with all opened projects. 
+
+Example:
+
+#+BEGIN_SRC elisp
+ELISP> (pjx--get-opened-projects)
+(("pjx.emacs" . "~/Documents/projects/pjx.emacs")
+ ("FsxTools.fsharp" . "~/Documents/projects/FsxTools.fsharp")
+ ("org-wiki.emacs" . "~/Documents/projects/org-wiki.emacs")
+ ("learn.fsharp" . "~/Documents/projects/learn.fsharp")
+ ("fsxgtk.fsharp" . "~/Documents/projects/fsxgtk.fsharp")
+ ("learn.haskell" . "~/Documents/projects/learn.haskell")
+ ("pget.fsharp" . "~/Documents/projects/pget.fsharp")
+ ("FSharpi.fsharp" . "~/Documents/projects/FSharpi.fsharp")
+ ("canvas.fsharp" . "~/Documents/projects/canvas.fsharp")
+ ("Wforms.fsharp" . "~/Documents/projects/Wforms.fsharp")
+ ("etoforms.fsharp" . "~/Documents/projects/etoforms.fsharp")
+ ("dataframe.fsharp" . "~/Documents/projects/dataframe.fsharp")
+ ("httpfs.fsharp" . "~/Documents/projects/httpfs.fsharp"))
+
+#+END_SRC
+
+*** pjx--project-close 
+
+Close/kill all buffers belonging to a project.
+
+#+BEGIN_SRC elisp 
+(pjx--project-close proj-name)
+#+END_SRC
+
+Example: Kill all buffers related to project _httpfs.fsharp_.
+
+#+BEGIN_SRC elisp
+ELISP> (pjx--project-close "httpfs.fsharp")
+(#<killed buffer>)
+#+END_SRC
+
