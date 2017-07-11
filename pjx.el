@@ -214,6 +214,11 @@ Default value '~/Documents/projects'."
   "Get the name of current project"
   (car (pjx--get-project-of-buffer)))
 
+(defun pjx--get-project-path ()
+  "Get current project absolute path."
+  (cdr (pjx--get-project-of-buffer)))
+
+
 ;;
 ;; ELISP> (pjx--get-project-buffers "pjx.emacs")
 ;; (#<buffer *ielm*> #<buffer pjx.el> #<buffer  *Minibuf-1*> #<buffer pjx-backup.el> ....)
