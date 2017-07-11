@@ -407,6 +407,19 @@ Default value '~/Documents/projects'."
      (pjx--project-close
       (file-name-nondirectory path)))))
 
+
+
+(defun pjx/close-files ()
+  "Close all current project buffers without close current project."
+  (interactive)
+  (mapc (lambda (buf)
+          (if (buffer-file-name buf)
+              (with-current-buffer buf
+                   (save-buffer)
+                   (kill-this-buffer)
+                   )))                
+       (pjx--get-project-buffers  (car (pjx--get-project-of-buffer)))))
+
 (defun pjx/close ()
   "Kill all buffers associated with a current project."
   (interactive)
