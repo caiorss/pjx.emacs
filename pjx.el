@@ -217,7 +217,7 @@ Default value '~/Documents/projects'."
 (defun pjx--get-project-path ()
   "Get current project absolute path."
   (cdr (pjx--get-project-of-buffer)))
-
+  
 
 ;;
 ;; ELISP> (pjx--get-project-buffers "pjx.emacs")
@@ -427,12 +427,12 @@ Default value '~/Documents/projects'."
                    (save-buffer)
                    (kill-this-buffer)
                    )))                
-       (pjx--get-project-buffers  (car (pjx--get-project-of-buffer)))))
+       (pjx--get-project-buffers  (pjx--get-project-name))))
 
 (defun pjx/close ()
   "Kill all buffers associated with a current project."
   (interactive)
-  (pjx--project-close (car (pjx--get-project-of-buffer))))
+  (pjx--project-close (pjx--get-project-name)))
 
 (defun pjx/close-frame ()
   "Kill all buffers related to current project and close current project frame."
@@ -472,7 +472,7 @@ Default value '~/Documents/projects'."
 (defun pjx/top ()
   "Go to current project root directory."
   (interactive)
-  (dired (cdr (pjx--get-project-of-buffer))))
+  (dired (pjx--get-project-path)))
 
 (defun pjx/switch ()
   "Switch between buffers belonging to current project."
@@ -484,7 +484,7 @@ Default value '~/Documents/projects'."
 		
                 (candidates . ,(mapcar (lambda (p) (cons (buffer-name p) p))
                                        (pjx--get-project-buffers
-                                        (car (pjx--get-project-of-buffer)))))
+                                        (pjx--get-project-name))))
 
                 (action     . switch-to-buffer)
                 ))))
@@ -501,8 +501,9 @@ Default value '~/Documents/projects'."
                 (candidates . ,(pjx--filter-project-buffers (car (pjx--get-project-of-buffer))
                                                             #'buffer-file-name
                                                             (lambda (buf)
-                                                              (file-relative-name (buffer-file-name buf)
-                                                                                  (cdr (pjx--get-project-of-buffer))))))
+                                                              (file-relative-name
+                                                               (buffer-file-name buf)
+                                                               (pjx--get-project-path)))))
 
                 (action     . switch-to-buffer)
                 ))))
@@ -520,7 +521,7 @@ Default value '~/Documents/projects'."
                                                             #'buffer-file-name
                                                             (lambda (buf)
                                                               (file-relative-name (buffer-file-name buf)
-                                                                                  (cdr (pjx--get-project-of-buffer))))))
+                                                                                  (pjx--get-project-path)))))
 
                 (action     . (lambda (buf) (with-selected-frame (make-frame)
                                                (switch-to-buffer buf))))
@@ -539,7 +540,7 @@ Default value '~/Documents/projects'."
                                                                                  (buffer-local-value 'major-mode buf)))
                                                             (lambda (buf) (file-relative-name
                                                                            (buffer-local-value 'default-directory buf)
-                                                                           (cdr (pjx--get-project-of-buffer))
+                                                                           (pjx--get-project-path)
                                                                            ))))
 
                 (action     . switch-to-buffer)
@@ -554,7 +555,7 @@ Default value '~/Documents/projects'."
    :sources  `((
                 (name       . "File: ")
                 (candidates . ,(pjx--find-files-subdirs
-                                 (cdr (pjx--get-project-of-buffer))
+                                 (pjx--get-project-path)
                                  pjx-files-exclude-list))
                 (action     .  find-file)
                 ))))
@@ -567,7 +568,7 @@ Default value '~/Documents/projects'."
    :sources  `((
                 (name       . "File: ")
                 (candidates . ,(pjx--find-files-subdirs
-                                 (cdr (pjx--get-project-of-buffer))
+                                (pjx--get-project-path)
                                  pjx-files-exclude-list))
                 
                 (action     .  (lambda (file) (with-selected-frame (make-frame)
@@ -584,7 +585,7 @@ Default value '~/Documents/projects'."
    :sources  `((
                 (name       . "File: ")
                                 
-                (candidates . ,(pjx--find-files-by-regex (car (pjx--get-project-of-buffer))
+                (candidates . ,(pjx--find-files-by-regex (pjx--get-project-name)
                                                          (read-regexp "Pattern: ")
                                                          pjx-ignore-prefix-list
                                                          pjx-ignore-suffix-list))
@@ -736,7 +737,7 @@ Use M-x pjx/switch-file to switch between the files opened."
   "Open all project files matching regex recursively."
   (interactive)
   (mapc  (lambda (cell) (find-file-noselect (cdr cell)))
-         (pjx--find-files-by-regex (car (pjx--get-project-of-buffer))
+         (pjx--find-files-by-regex (pjx--get-project-name)
                              (read-regexp "Pattern: ")
                              pjx-ignore-prefix-list
                              pjx-ignore-suffix-list)))
