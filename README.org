@@ -1,6 +1,7 @@
 #+TITLE: Emacs Project Manager - Pjx
 #+DESCRIPTION: Project Manager For Emacs
 #+KEYWORDS: Eamcs project manager files development tool
+#+STARTUP: showall
 
 * Emacs-project Manager - pjx 
 ** Overview 
@@ -144,9 +145,11 @@ $ tree -L 2 ~/Documents/projects
 |                           |                                                                                                     |
 | pjx/open-frame            | Like pjx/open-frame, but open the project in a new frame. This frame is exclusive to project.       |
 |                           |                                                                                                     |
-| pjx/close                 | Kill all buffers related to current project                                                         |
+| pjx/close                 | Close current project, killing all buffers related to it.                                           |
 |                           |                                                                                                     |
-| pjx/close-frame           | Kill all buffers related to current project and closes the current frame.                           |
+| pjx/close-files           | Close all files (only buffere bound to files) belonging to current project.                         |
+|                           |                                                                                                     |
+| pjx/close-frame           | Close current project nad close its frame.                                                          |
 |                           |                                                                                                     |
 | pjx/close-all             | Close all projects.                                                                                 |
 |                           |                                                                                                     |
