@@ -758,10 +758,35 @@ Use M-x pjx/switch-file to switch between the files opened."
 ;;; **** Commands to Build Project / Compile *******
 
 (defun pjx/compile ()
-  "Run compilation command at current project directory."
+  "Run compilation command at current project directory.
+
+- %f - is expanded to current buffer's file name. 
+- %a - is expanded to current buffer full file name.
+- %d - is expanded to current buffer's current directory.
+- %n - is expanded to current buffer's base name.
+
+Example: if the current buffer is associated to the file. 
+ - /home/arch/scripts/gui1.scala 
+
+If the user enter the command: 
+  
+ $ scalac %f -d app-%n.jar && scala app-%n.jar
+
+It will run M-x compile with: 
+
+ $ scalac gui1.scala -d app-gui1.jar && scala scala app-gui1.jar"
   (interactive)
   (let ((default-directory (cdr (pjx--get-project-of-buffer))))
-    (call-interactively #'compile)))
+    (let* ((file (buffer-file-name))
+         (cmd  (read-shell-command "cmd> " compile2-command-history))
+         (cmd1 (replace-regexp-in-string "%f" (file-name-nondirectory file) cmd))
+         (cmd2 (replace-regexp-in-string "%n" (file-name-base file)   cmd1))
+         (cmd3 (replace-regexp-in-string "%d" (file-name-directory    file) cmd2))
+         (cmd4 (replace-regexp-in-string "%a" (buffer-file-name)      cmd3))
+         )
+    (setq compile2-command-history cmd)
+    (save-buffer)
+    (compile cmd4))))
 
 (defun pjx/make ()
   "Run $ make at project root directory and execute Makefile main rule."
